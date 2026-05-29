@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DENTIST
+  STAFF
+}
+
+enum InterventionType {
+  CONTROL
+  DETARTRAJ
+  PLOMBA
+  EXTRACTIE
+  TRATAMENT_CANAL
+  ALTCEVA
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  CONFIRMED
+  BOOKED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(STAFF)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model Dentist {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?  @unique
+  color     String   @default("#005dac")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  patients          Patient[]
+  interventions     Intervention[]
+  appointments      Appointment[]
+  workingSchedules  WorkingSchedule[]
+}
+
+model Patient {
+  id               String   @id @default(cuid())
+  fullName         String
+  phone            String
+  email            String?
+  dateOfBirth      DateTime?
+  assignedDentistId String?
+  medicalNotes     String?
+  allergies        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  assignedDentist  Dentist?       @relation(fields: [assignedDentistId], references: [id])
+  interventions    Intervention[]
+  appointments     Appointment[]
+  recallReminders  RecallReminder[]
+  reminderLogs     ReminderLog[]
+
+  @@index([phone])
+  @@index([fullName])
+}
+
+model Intervention {
+  id            String           @id @default(cuid())
+  patientId     String
+  dentistId     String
+  date          DateTime
+  type          InterventionType
+  teethOrArea   String?
+  notes         String?
+  estimatedCost Decimal?         @db.Decimal(10, 2)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dentist Dentist @relation(fields: [dentistId], references: [id])
+
+  @@index([patientId])
+}
+
+model Appointment {
+  id            String            @id @default(cuid())
+  patientId     String
+  dentistId     String
+  startTime     DateTime
+  endTime       DateTime
+  status        AppointmentStatus @default(SCHEDULED)
+  procedureType String?
+  notes         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dentist Dentist @relation(fields: [dentistId], references: [id])
+
+  @@index([dentistId, startTime])
+}
+
+model RecallReminder {
+  id         String         @id @default(cuid())
+  patientId  String
+  dueDate    DateTime
+  status     ReminderStatus @default(PENDING)
+  lastSentAt DateTime?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  reminderLogs ReminderLog[]
+
+  @@index([dueDate])
+}
+
+model ReminderLog {
+  id                String   @id @default(cuid())
+  patientId         String
+  reminderId        String?
+  emailTo           String
+  status            String
+  providerMessageId String?
+  sentAt            DateTime @default(now())
+  errorMessage      String?
+
+  patient  Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  reminder RecallReminder? @relation(fields: [reminderId], references: [id], onDelete: SetNull)
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model WorkingSchedule {
+  id                  String  @id @default(cuid())
+  dentistId           String
+  dayOfWeek           Int
+  startTime           String
+  endTime             String
+  slotDurationMinutes Int     @default(30)
+  active              Boolean @default(true)
+
+  dentist Dentist @relation(fields: [dentistId], references: [id], onDelete: Cascade)
+
+  @@index([dentistId])
+}
