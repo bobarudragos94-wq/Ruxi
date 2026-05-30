@@ -6,4 +6,6 @@ export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({ log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"] });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Reuse a single client across warm serverless invocations to avoid exhausting
+// the connection pool (important on Netlify/Lambda + Supabase pooler).
+globalForPrisma.prisma = prisma;
