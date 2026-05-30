@@ -7,6 +7,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # NEXT_PUBLIC_* values are intentionally inlined into the client bundle.
+  # Tell Netlify's secret scanner to ignore this non-secret public key.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_APP_URL"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
