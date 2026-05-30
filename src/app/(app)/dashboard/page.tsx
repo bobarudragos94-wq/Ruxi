@@ -42,14 +42,11 @@ export default async function DashboardPage() {
     prisma.dentist.findMany({ where: { active: true }, orderBy: { name: "asc" } }),
   ]);
 
-  const dentistCounts = await Promise.all(
-    dentists.map(async (d) => ({
-      dentist: d,
-      today: await prisma.appointment.count({
-        where: { dentistId: d.id, startTime: { gte: todayStart, lte: todayEnd }, status: { not: "CANCELLED" } },
-      }),
-    }))
-  );
+  // Count today's appointments per dentist from already-fetched data (no extra queries).
+  const dentistCounts = dentists.map((d) => ({
+    dentist: d,
+    today: todays.filter((a) => a.dentistId === d.id).length,
+  }));
 
   return (
     <div className="space-y-6">

@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/ui";
 import { CalendarView } from "@/components/CalendarView";
-import { getSlotsWithStatus } from "@/lib/slots";
-import { startOfWeek, addDays } from "@/lib/date";
+import { getWeekSlotsWithStatus } from "@/lib/slots";
+import { startOfWeek } from "@/lib/date";
 
 export default async function CalendarPage({
   searchParams,
@@ -16,29 +16,26 @@ export default async function CalendarPage({
   const baseDate = week ? new Date(week) : new Date();
   const weekStart = startOfWeek(baseDate);
 
-  // Build 6 working days (Mon-Sat); Sunday closed.
-  const days = Array.from({ length: 6 }, (_, i) => addDays(weekStart, i));
+  // Fetch the whole week in 2 queries (schedules + appointments), compute slots in memory.
+  const [weekSlots, patients] = await Promise.all([
+    selectedDentistId ? getWeekSlotsWithStatus(selectedDentistId, weekStart) : Promise.resolve([]),
+    prisma.patient.findMany({
+      select: { id: true, fullName: true },
+      orderBy: { fullName: "asc" },
+      take: 500,
+    }),
+  ]);
 
-  const daysWithSlots = selectedDentistId
-    ? await Promise.all(
-        days.map(async (day) => ({
-          date: day.toISOString(),
-          slots: (await getSlotsWithStatus(selectedDentistId, day)).map((s) => ({
-            start: s.start.toISOString(),
-            label: s.label,
-            booked: s.booked,
-            appointmentId: s.appointmentId,
-            patientName: s.patientName,
-          })),
-        }))
-      )
-    : [];
-
-  const patients = await prisma.patient.findMany({
-    select: { id: true, fullName: true },
-    orderBy: { fullName: "asc" },
-    take: 500,
-  });
+  const daysWithSlots = weekSlots.map((d) => ({
+    date: d.date.toISOString(),
+    slots: d.slots.map((s) => ({
+      start: s.start.toISOString(),
+      label: s.label,
+      booked: s.booked,
+      appointmentId: s.appointmentId,
+      patientName: s.patientName,
+    })),
+  }));
 
   return (
     <div className="space-y-5">
