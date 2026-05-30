@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { PageHeader, Card, EmptyState } from "@/components/ui";
 import { Icon } from "@/components/Icon";
+import { PatientSearch } from "@/components/PatientSearch";
 import { formatPhoneDisplay } from "@/lib/phone";
 
 export default async function PatientsPage({
@@ -45,15 +46,7 @@ export default async function PatientsPage({
         }
       />
 
-      <form className="relative">
-        <Icon name="search" className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
-        <input
-          name="q"
-          defaultValue={query}
-          placeholder="Caută după nume sau telefon..."
-          className="w-full h-12 pl-12 pr-4 bg-surface-container-lowest border border-outline rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-        />
-      </form>
+      <PatientSearch initialQuery={query} />
 
       {patients.length === 0 ? (
         <Card className="p-2">

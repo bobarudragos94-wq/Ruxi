@@ -14,6 +14,7 @@ const patientSchema = z.object({
   email: z.string().email("Email invalid").optional().or(z.literal("")),
   dateOfBirth: z.string().optional().or(z.literal("")),
   assignedDentistId: z.string().optional().or(z.literal("")),
+  address: z.string().optional().or(z.literal("")),
   medicalNotes: z.string().optional().or(z.literal("")),
   allergies: z.string().optional().or(z.literal("")),
 });
@@ -40,6 +41,7 @@ export async function createPatient(_prev: PatientFormState, formData: FormData)
       email: parsed.data.email || null,
       dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null,
       assignedDentistId: parsed.data.assignedDentistId || null,
+      address: parsed.data.address || null,
       medicalNotes: parsed.data.medicalNotes || null,
       allergies: parsed.data.allergies || null,
     },
@@ -70,6 +72,7 @@ export async function updatePatient(id: string, _prev: PatientFormState, formDat
       email: parsed.data.email || null,
       dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null,
       assignedDentistId: parsed.data.assignedDentistId || null,
+      address: parsed.data.address || null,
       medicalNotes: parsed.data.medicalNotes || null,
       allergies: parsed.data.allergies || null,
     },

@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "./Icon";
+import { Logo } from "./Logo";
+import { ProfileMenu } from "./ProfileMenu";
+import { ScrollReset } from "./ScrollReset";
 import type { SessionUser } from "@/lib/auth";
-import { ROLE_LABELS } from "@/lib/constants";
+import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand";
 
 const NAV = [
   { href: "/dashboard", label: "Acasă", icon: "dashboard" },
@@ -23,17 +26,23 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
 
   return (
     <div className="min-h-screen flex">
+      <ScrollReset />
+
       {/* Desktop sidebar */}
       <aside className="fixed left-0 top-0 h-full w-[260px] hidden md:flex flex-col bg-surface-container-lowest border-r border-outline-variant py-6 z-30">
-        <div className="px-6 mb-8 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
-            <Icon name="dentistry" filled />
+        <Link
+          href="/dashboard"
+          className="px-6 mb-8 flex items-center gap-3 group"
+          aria-label="Acasă"
+        >
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary group-hover:scale-105 transition-transform">
+            <Logo className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="font-bold text-primary leading-tight">Cabinet</h2>
-            <p className="text-xs text-on-surface-variant">Stomatologie</p>
+            <h2 className="font-bold text-primary leading-tight">{BRAND_NAME}</h2>
+            <p className="text-xs text-on-surface-variant">{BRAND_TAGLINE}</p>
           </div>
-        </div>
+        </Link>
         <nav className="flex flex-col gap-1 px-3 flex-1">
           {NAV.map((item) => {
             const active = isActive(pathname, item.href);
@@ -54,37 +63,19 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
           })}
         </nav>
         <div className="px-4 mt-4 border-t border-outline-variant pt-4">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-semibold">
-              {user.name.charAt(0)}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-xs text-on-surface-variant">{ROLE_LABELS[user.role]}</p>
-            </div>
-          </div>
-          <form action="/api/auth/logout" method="post" className="mt-3">
-            <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant hover:text-error transition-colors">
-              <Icon name="logout" className="!text-lg" />
-              Deconectare
-            </button>
-          </form>
+          <ProfileMenu user={user} variant="sidebar" />
         </div>
       </aside>
 
       {/* Mobile top bar */}
       <header className="fixed top-0 left-0 right-0 md:hidden h-14 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-4 z-40">
-        <div className="flex items-center gap-2">
+        <Link href="/dashboard" className="flex items-center gap-2" aria-label="Acasă">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
-            <Icon name="dentistry" filled className="!text-lg" />
+            <Logo className="w-5 h-5" />
           </div>
-          <span className="font-bold text-primary">Cabinet</span>
-        </div>
-        <form action="/api/auth/logout" method="post">
-          <button className="p-2 text-on-surface-variant rounded-full hover:bg-surface-container">
-            <Icon name="logout" />
-          </button>
-        </form>
+          <span className="font-bold text-primary">{BRAND_NAME}</span>
+        </Link>
+        <ProfileMenu user={user} variant="topbar" />
       </header>
 
       {/* Main */}

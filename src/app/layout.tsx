@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { ZoomGuard } from "@/components/ZoomGuard";
 
 export const metadata: Metadata = {
-  title: "Cabinet Stomatologic",
-  description: "Aplicație internă pentru cabinetul stomatologic",
+  title: "Erident — Cabinet stomatologic",
+  description: "Aplicație internă Erident pentru cabinetul stomatologic",
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, statusBarStyle: "default", title: "Cabinet" },
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "Erident" },
 };
 
 export const viewport: Viewport = {
@@ -14,6 +15,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -32,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-background text-on-surface antialiased">
         {children}
         <ServiceWorker />
+        <ZoomGuard />
       </body>
     </html>
   );

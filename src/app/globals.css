@@ -6,11 +6,20 @@
   color-scheme: light;
 }
 
+html {
+  /* Prevent pinch-zoom while keeping normal vertical/horizontal panning. */
+  touch-action: pan-x pan-y;
+  /* Stop iOS/Android rubber-band overscroll so it feels like a native app. */
+  overscroll-behavior: none;
+}
+
 body {
   font-family: "Inter", system-ui, sans-serif;
   background-color: #f7f9fb;
   color: #191c1e;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
 }
 
 .no-scrollbar::-webkit-scrollbar {

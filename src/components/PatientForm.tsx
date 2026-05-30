@@ -13,6 +13,7 @@ type Patient = {
   email: string | null;
   dateOfBirth: Date | null;
   assignedDentistId: string | null;
+  address: string | null;
   medicalNotes: string | null;
   allergies: string | null;
 };
@@ -59,6 +60,15 @@ export function PatientForm({
           <Input id="allergies" name="allergies" defaultValue={patient?.allergies ?? ""} placeholder="Ex: Penicilină" />
         </Field>
       </div>
+
+      <Field label="Adresă" htmlFor="address">
+        <Input
+          id="address"
+          name="address"
+          defaultValue={patient?.address ?? ""}
+          placeholder="Stradă, număr, oraș, județ"
+        />
+      </Field>
 
       <Field label="Note medicale" htmlFor="medicalNotes">
         <Textarea

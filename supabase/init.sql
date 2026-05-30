@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS "Patient" (
   "assignedDentistId" TEXT,
   "medicalNotes"      TEXT,
   "allergies"         TEXT,
+  "address"           TEXT,
   "isNew"             BOOLEAN NOT NULL DEFAULT false,
   "createdAt"         TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt"         TIMESTAMP(3) NOT NULL,
