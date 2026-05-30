@@ -4,9 +4,10 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
 import { Role } from "@prisma/client";
+import { getAuthSecret } from "./secret";
 
 const SESSION_COOKIE = "ruxi_session";
-const secret = new TextEncoder().encode(process.env.AUTH_SECRET || "dev-secret-change-me-please-32chars!!");
+const secret = getAuthSecret();
 
 export interface SessionUser {
   id: string;

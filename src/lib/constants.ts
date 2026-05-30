@@ -23,6 +23,9 @@ export function publicServiceLabel(value: string): string | null {
   return PUBLIC_SERVICES.find((s) => s.value === value)?.label ?? null;
 }
 
+/** How far ahead the public booking flow may reach (anti-abuse horizon). */
+export const PUBLIC_BOOKING_HORIZON_DAYS = 90;
+
 export const APPOINTMENT_STATUS_LABELS: Record<AppointmentStatus, string> = {
   SCHEDULED: "Programat",
   CONFIRMED: "Confirmat",

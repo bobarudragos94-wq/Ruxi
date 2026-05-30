@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { verifyBookingToken } from "@/lib/booking-token";
 import { getWeekAvailableSlots } from "@/lib/slots";
 import { startOfWeek } from "@/lib/date";
+import { PUBLIC_BOOKING_HORIZON_DAYS } from "@/lib/constants";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -29,6 +30,11 @@ export async function GET(req: Request) {
   if (!dentistId) return NextResponse.json({ error: "Medic invalid" }, { status: 400 });
 
   const base = weekParam ? new Date(weekParam) : new Date();
+  if (isNaN(base.getTime())) return NextResponse.json({ error: "Săptămână invalidă" }, { status: 400 });
+  // Clamp to a sane window: not in the past, not beyond the booking horizon.
+  const horizon = new Date();
+  horizon.setDate(horizon.getDate() + PUBLIC_BOOKING_HORIZON_DAYS);
+  if (base > horizon) return NextResponse.json({ week: startOfWeek(horizon).toISOString(), days: [] });
   const weekStart = startOfWeek(base);
 
   const week = await getWeekAvailableSlots(dentistId, weekStart);

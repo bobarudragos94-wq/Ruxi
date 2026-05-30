@@ -1,8 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
+import { getAuthSecret } from "./secret";
 
-const secret = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "dev-secret-change-me-please-32chars!!"
-);
+const secret = getAuthSecret();
 
 /**
  * Booking context carried between public steps, signed so raw data isn't

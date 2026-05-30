@@ -3,12 +3,11 @@ export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { normalizePhone } from "@/lib/phone";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 import { createBookingToken } from "@/lib/booking-token";
 
 export async function POST(req: Request) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-  const { allowed } = rateLimit(`book-lookup:${ip}`, 8, 60_000);
+  const { allowed } = rateLimit(`book-lookup:${clientIp(req)}`, 8, 60_000);
   if (!allowed) {
     return NextResponse.json(
       { error: "Prea multe încercări. Reîncercați mai târziu." },

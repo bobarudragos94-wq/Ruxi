@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { getAuthSecret } from "./lib/secret";
 
-const secret = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "dev-secret-change-me-please-32chars!!"
-);
+const secret = getAuthSecret();
 
 // Public routes accessible without authentication.
 const PUBLIC_PREFIXES = ["/login", "/book", "/api/book", "/api/auth", "/manifest.webmanifest", "/sw.js"];
