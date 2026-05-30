@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
-import { computeRecallDueDate, triggersRecall } from "@/lib/recall";
+import { invalidateRecall } from "@/lib/recall-query";
 import { InterventionType } from "@prisma/client";
 
 const schema = z.object({
@@ -57,22 +57,8 @@ export async function createIntervention(
     metadata: { patientId, type: parsed.data.type },
   });
 
-  // After Control or Detartraj, (re)schedule the 6-month recall.
-  if (triggersRecall(parsed.data.type)) {
-    const dueDate = computeRecallDueDate(date);
-    const existing = await prisma.recallReminder.findFirst({
-      where: { patientId, status: { in: ["PENDING", "SENT"] } },
-      orderBy: { createdAt: "desc" },
-    });
-    if (existing) {
-      await prisma.recallReminder.update({
-        where: { id: existing.id },
-        data: { dueDate, status: "PENDING" },
-      });
-    } else {
-      await prisma.recallReminder.create({ data: { patientId, dueDate, status: "PENDING" } });
-    }
-  }
+  // Recording a visit changes recall eligibility — refresh the cached list.
+  invalidateRecall();
 
   revalidatePath(`/patients/${patientId}`);
   redirect(`/patients/${patientId}?tab=interventions`);

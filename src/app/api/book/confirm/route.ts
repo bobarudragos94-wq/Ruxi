@@ -7,6 +7,7 @@ import { generateSlotsForDay } from "@/lib/slots";
 import { logAudit } from "@/lib/audit";
 import { publicServiceLabel, PUBLIC_BOOKING_HORIZON_DAYS } from "@/lib/constants";
 import { rateLimit, clientIp } from "@/lib/ratelimit";
+import { invalidateRecall } from "@/lib/recall-query";
 
 export async function POST(req: Request) {
   // Throttle the booking-creation endpoint to limit calendar/DB flooding.
@@ -98,20 +99,15 @@ export async function POST(req: Request) {
     },
   });
 
-  // Existing patients: a fulfilled recall becomes "booked".
-  if (claim.kind === "existing") {
-    await prisma.recallReminder.updateMany({
-      where: { patientId, status: { in: ["PENDING", "SENT"] } },
-      data: { status: "BOOKED" },
-    });
-  }
-
   await logAudit({
     action: isNewPatient ? "PUBLIC_BOOKING_NEW_PATIENT" : "PUBLIC_BOOKING",
     entityType: "Appointment",
     entityId: appt.id,
     metadata: { source: "public", service: serviceLabel, isNewPatient },
   });
+
+  // A booked future appointment removes the patient from the recall list.
+  invalidateRecall();
 
   return NextResponse.json({ ok: true, startTime: slot.start.toISOString() });
 }

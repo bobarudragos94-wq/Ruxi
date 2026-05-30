@@ -5,6 +5,9 @@ import { Icon } from "@/components/Icon";
 import { NewPatientAlert, type NewPatientLead } from "@/components/NewPatientAlert";
 import { formatTimeRo, formatDateRo, formatDateTimeRo } from "@/lib/date";
 import { APPOINTMENT_STATUS_LABELS } from "@/lib/constants";
+import { getRecallCandidates } from "@/lib/recall-query";
+
+export const dynamic = "force-dynamic";
 
 const QUICK_ACTIONS = [
   { href: "/patients/new", label: "Pacient nou", icon: "person_add" },
@@ -22,7 +25,7 @@ export default async function DashboardPage() {
   const in30 = new Date(now);
   in30.setDate(in30.getDate() + 30);
 
-  const [todays, upcoming, recalls, dentists] = await Promise.all([
+  const [todays, upcoming, recallCandidates, dentists] = await Promise.all([
     prisma.appointment.findMany({
       where: { startTime: { gte: todayStart, lte: todayEnd }, status: { not: "CANCELLED" } },
       include: { patient: true, dentist: true },
@@ -34,14 +37,11 @@ export default async function DashboardPage() {
       orderBy: { startTime: "asc" },
       take: 6,
     }),
-    prisma.recallReminder.findMany({
-      where: { dueDate: { lte: in30 }, status: { in: ["PENDING", "SENT"] } },
-      include: { patient: { include: { assignedDentist: true } } },
-      orderBy: { dueDate: "asc" },
-      take: 8,
-    }),
+    getRecallCandidates(),
     prisma.dentist.findMany({ where: { active: true }, orderBy: { name: "asc" } }),
   ]);
+
+  const recalls = recallCandidates.slice(0, 8);
 
   // New patients registered via the public booking flow, awaiting staff review.
   const newPatients = await prisma.patient.findMany({
@@ -193,22 +193,19 @@ export default async function DashboardPage() {
           <p className="text-sm text-on-surface-variant py-6 text-center">Niciun pacient de rechemat momentan.</p>
         ) : (
           <ul className="divide-y divide-outline-variant">
-            {recalls.map((r) => {
-              const overdue = new Date(r.dueDate) < now;
-              return (
-                <li key={r.id} className="py-3 flex items-center gap-3">
-                  <div className="flex-1">
-                    <Link href={`/patients/${r.patientId}`} className="font-medium hover:text-primary">
-                      {r.patient.fullName}
-                    </Link>
-                    <p className="text-xs text-on-surface-variant">
-                      {r.patient.assignedDentist?.name || "Fără medic"} · scadent {formatDateRo(r.dueDate)}
-                    </p>
-                  </div>
-                  <Badge tone={overdue ? "danger" : "warning"}>{overdue ? "Restant" : "În curând"}</Badge>
-                </li>
-              );
-            })}
+            {recalls.map((r) => (
+              <li key={r.patientId} className="py-3 flex items-center gap-3">
+                <div className="flex-1">
+                  <Link href={`/patients/${r.patientId}`} className="font-medium hover:text-primary">
+                    {r.fullName}
+                  </Link>
+                  <p className="text-xs text-on-surface-variant">
+                    {r.dentistName} · ultima vizită {formatDateRo(r.lastVisit)}
+                  </p>
+                </div>
+                <Badge tone="warning">De rechemat</Badge>
+              </li>
+            ))}
           </ul>
         )}
       </Card>

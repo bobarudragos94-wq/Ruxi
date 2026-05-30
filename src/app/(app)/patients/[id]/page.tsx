@@ -6,7 +6,7 @@ import { Icon } from "@/components/Icon";
 import { PatientTabs } from "@/components/PatientTabs";
 import { formatPhoneDisplay } from "@/lib/phone";
 import { formatDateRo, formatDateTimeRo } from "@/lib/date";
-import { INTERVENTION_LABELS, APPOINTMENT_STATUS_LABELS, REMINDER_STATUS_LABELS } from "@/lib/constants";
+import { INTERVENTION_LABELS, APPOINTMENT_STATUS_LABELS } from "@/lib/constants";
 
 export default async function PatientDetailPage({
   params,
@@ -24,13 +24,25 @@ export default async function PatientDetailPage({
       assignedDentist: true,
       interventions: { include: { dentist: true }, orderBy: { date: "desc" } },
       appointments: { include: { dentist: true }, orderBy: { startTime: "desc" } },
-      recallReminders: { orderBy: { dueDate: "desc" } },
+      reminderLogs: { orderBy: { sentAt: "desc" } },
     },
   });
   if (!patient) notFound();
 
-  const lastVisit = patient.interventions[0]?.date ?? patient.appointments.find((a) => a.status === "COMPLETED")?.startTime;
-  const nextRecall = patient.recallReminders.find((r) => r.status === "PENDING" || r.status === "SENT");
+  const now = new Date();
+  const pastVisits = [
+    patient.interventions[0]?.date,
+    ...patient.appointments.filter((a) => a.startTime <= now && a.status !== "CANCELLED").map((a) => a.startTime),
+  ].filter(Boolean) as Date[];
+  const lastVisit = pastVisits.length ? new Date(Math.max(...pastVisits.map((d) => d.getTime()))) : undefined;
+  // Next recall ≈ 6 months after the last visit (derived, not stored).
+  const nextRecall = lastVisit
+    ? (() => {
+        const d = new Date(lastVisit);
+        d.setMonth(d.getMonth() + 6);
+        return d;
+      })()
+    : undefined;
 
   const details = (
     <div className="space-y-4">
@@ -108,16 +120,30 @@ export default async function PatientDetailPage({
 
   const reminders = (
     <div className="space-y-3">
-      {patient.recallReminders.length === 0 ? (
-        <EmptyState icon="notifications_off" title="Niciun reminder" />
+      {nextRecall && (
+        <Card className="p-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="font-medium">Recall estimat: {formatDateRo(nextRecall)}</p>
+            <p className="text-sm text-on-surface-variant">La 6 luni de la ultima vizită</p>
+          </div>
+          <Badge tone={nextRecall <= now ? "warning" : "neutral"}>
+            {nextRecall <= now ? "De rechemat" : "Programat"}
+          </Badge>
+        </Card>
+      )}
+      <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant mt-2">
+        Emailuri trimise
+      </p>
+      {patient.reminderLogs.length === 0 ? (
+        <EmptyState icon="notifications_off" title="Niciun email trimis" />
       ) : (
-        patient.recallReminders.map((r) => (
+        patient.reminderLogs.map((r) => (
           <Card key={r.id} className="p-4 flex items-center justify-between gap-3">
             <div>
-              <p className="font-medium">Scadent {formatDateRo(r.dueDate)}</p>
-              {r.lastSentAt && <p className="text-sm text-on-surface-variant">Trimis {formatDateRo(r.lastSentAt)}</p>}
+              <p className="font-medium">{r.emailTo}</p>
+              <p className="text-sm text-on-surface-variant">Trimis {formatDateRo(r.sentAt)}</p>
             </div>
-            <Badge tone={r.status === "PENDING" ? "warning" : "neutral"}>{REMINDER_STATUS_LABELS[r.status]}</Badge>
+            <Badge tone={r.status === "SENT" ? "success" : "danger"}>{r.status}</Badge>
           </Card>
         ))
       )}
@@ -148,7 +174,7 @@ export default async function PatientDetailPage({
         <div className="grid grid-cols-3 gap-3 mt-5">
           <Stat label="Medic" value={patient.assignedDentist?.name || "—"} />
           <Stat label="Ultima vizită" value={lastVisit ? formatDateRo(lastVisit) : "—"} />
-          <Stat label="Recall" value={nextRecall ? formatDateRo(nextRecall.dueDate) : "—"} />
+          <Stat label="Recall" value={nextRecall ? formatDateRo(nextRecall) : "—"} />
         </div>
       </Card>
 

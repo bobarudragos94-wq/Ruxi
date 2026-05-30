@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
 import { generateSlotsForDay } from "@/lib/slots";
-import { computeRecallDueDate } from "@/lib/recall";
+import { invalidateRecall } from "@/lib/recall-query";
 
 const schema = z.object({
   patientId: z.string().min(1, "Selectați pacientul"),
@@ -61,28 +61,12 @@ export async function createAppointment(
     },
   });
 
-  // Schedule a 6-month recall reminder from the appointment date so the patient
-  // shows up in the Reminders tab. Reuse an existing open reminder if present.
-  const dueDate = computeRecallDueDate(start);
-  const existing = await prisma.recallReminder.findFirst({
-    where: { patientId: parsed.data.patientId, status: { in: ["PENDING", "SENT"] } },
-    orderBy: { createdAt: "desc" },
-  });
-  if (existing) {
-    await prisma.recallReminder.update({
-      where: { id: existing.id },
-      data: { dueDate, status: "PENDING" },
-    });
-  } else {
-    await prisma.recallReminder.create({
-      data: { patientId: parsed.data.patientId, dueDate, status: "PENDING" },
-    });
-  }
+  // A booked future appointment removes the patient from the recall list.
+  invalidateRecall();
 
   await logAudit({ userId: user.id, action: "CREATE", entityType: "Appointment", entityId: appt.id });
   revalidatePath("/calendar");
   revalidatePath("/dashboard");
-  revalidatePath("/reminders");
   return { ok: true };
 }
 
@@ -90,5 +74,7 @@ export async function cancelAppointment(id: string): Promise<void> {
   const user = await requireUser();
   await prisma.appointment.update({ where: { id }, data: { status: "CANCELLED" } });
   await logAudit({ userId: user.id, action: "CANCEL", entityType: "Appointment", entityId: id });
+  // Cancelling may make the patient recall-eligible again.
+  invalidateRecall();
   revalidatePath("/calendar");
 }

@@ -6,27 +6,23 @@ import { useRouter } from "next/navigation";
 import { Icon } from "./Icon";
 import { Badge } from "./ui";
 import { sendReminder } from "@/lib/actions/reminders";
-import { REMINDER_STATUS_LABELS } from "@/lib/constants";
-import type { ReminderStatus } from "@prisma/client";
 
 export function ReminderRow({
-  id,
   patientId,
   patientName,
   dentistName,
-  dueDate,
-  status,
-  overdue,
+  lastVisit,
+  monthsSince,
   hasEmail,
+  remindedLabel,
 }: {
-  id: string;
   patientId: string;
   patientName: string;
   dentistName: string;
-  dueDate: string;
-  status: ReminderStatus;
-  overdue: boolean;
+  lastVisit: string;
+  monthsSince: number;
   hasEmail: boolean;
+  remindedLabel: string | null;
 }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
@@ -35,7 +31,7 @@ export function ReminderRow({
   async function send() {
     setPending(true);
     setMsg("");
-    const res = await sendReminder(id);
+    const res = await sendReminder(patientId);
     setPending(false);
     if (res.ok) {
       setMsg("Trimis ✓");
@@ -52,11 +48,12 @@ export function ReminderRow({
           {patientName}
         </Link>
         <p className="text-xs text-on-surface-variant">
-          {dentistName} · scadent {dueDate}
+          {dentistName} · ultima vizită {lastVisit}
+          {remindedLabel ? ` · reamintit ${remindedLabel}` : ""}
         </p>
       </div>
-      <Badge tone={overdue ? "danger" : status === "SENT" ? "neutral" : "warning"}>
-        {overdue && status === "PENDING" ? "Restant" : REMINDER_STATUS_LABELS[status]}
+      <Badge tone={monthsSince >= 12 ? "danger" : "warning"}>
+        {monthsSince} luni
       </Badge>
       <button
         onClick={send}
