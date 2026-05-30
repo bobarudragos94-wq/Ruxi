@@ -10,6 +10,19 @@ export const INTERVENTION_LABELS: Record<InterventionType, string> = {
   ALTCEVA: "Altceva",
 };
 
+/** Services a patient can pick in the public booking flow (no "Altceva"). */
+export const PUBLIC_SERVICES: { value: InterventionType; label: string }[] = [
+  { value: "CONTROL", label: "Control" },
+  { value: "DETARTRAJ", label: "Detartraj" },
+  { value: "PLOMBA", label: "Plombă" },
+  { value: "EXTRACTIE", label: "Extracție" },
+  { value: "TRATAMENT_CANAL", label: "Tratament canal" },
+];
+
+export function publicServiceLabel(value: string): string | null {
+  return PUBLIC_SERVICES.find((s) => s.value === value)?.label ?? null;
+}
+
 export const APPOINTMENT_STATUS_LABELS: Record<AppointmentStatus, string> = {
   SCHEDULED: "Programat",
   CONFIRMED: "Confirmat",

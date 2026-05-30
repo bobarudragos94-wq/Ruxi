@@ -2,7 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, Badge } from "@/components/ui";
 import { Icon } from "@/components/Icon";
-import { formatTimeRo, formatDateRo } from "@/lib/date";
+import { NewPatientAlert, type NewPatientLead } from "@/components/NewPatientAlert";
+import { formatTimeRo, formatDateRo, formatDateTimeRo } from "@/lib/date";
 import { APPOINTMENT_STATUS_LABELS } from "@/lib/constants";
 
 const QUICK_ACTIONS = [
@@ -42,6 +43,27 @@ export default async function DashboardPage() {
     prisma.dentist.findMany({ where: { active: true }, orderBy: { name: "asc" } }),
   ]);
 
+  // New patients registered via the public booking flow, awaiting staff review.
+  const newPatients = await prisma.patient.findMany({
+    where: { isNew: true },
+    include: {
+      assignedDentist: true,
+      appointments: {
+        where: { startTime: { gte: todayStart }, status: { not: "CANCELLED" } },
+        orderBy: { startTime: "asc" },
+        take: 1,
+      },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 10,
+  });
+  const newPatientLeads: NewPatientLead[] = newPatients.map((p) => ({
+    id: p.id,
+    fullName: p.fullName,
+    dentistName: p.assignedDentist?.name ?? "Fără medic",
+    apptLabel: p.appointments[0] ? formatDateTimeRo(p.appointments[0].startTime) : null,
+  }));
+
   // Count today's appointments per dentist from already-fetched data (no extra queries).
   const dentistCounts = dentists.map((d) => ({
     dentist: d,
@@ -54,6 +76,8 @@ export default async function DashboardPage() {
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Bună ziua 👋</h1>
         <p className="text-on-surface-variant mt-1">Iată ce se întâmplă azi în cabinet.</p>
       </div>
+
+      <NewPatientAlert leads={newPatientLeads} />
 
       {/* Quick actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

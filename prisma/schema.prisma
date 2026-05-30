@@ -74,6 +74,7 @@ model Patient {
   assignedDentistId String?
   medicalNotes     String?
   allergies        String?
+  isNew            Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
