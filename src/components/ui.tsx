@@ -3,12 +3,15 @@ import { Icon } from "./Icon";
 export function Card({
   children,
   className = "",
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
   return (
     <div
+      id={id}
       className={`bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant ${className}`}
     >
       {children}

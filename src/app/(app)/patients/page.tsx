@@ -12,13 +12,13 @@ export default async function PatientsPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q } = await searchParams;
-  const query = (q || "").trim();
+  const searchTerm = (q || "").trim();
 
-  const where: Prisma.PatientWhereInput = query
+  const where: Prisma.PatientWhereInput = searchTerm
     ? {
         OR: [
-          { fullName: { contains: query, mode: "insensitive" } },
-          { phone: { contains: query.replace(/\s/g, "") } },
+          { fullName: { contains: searchTerm, mode: "insensitive" } },
+          { phone: { contains: searchTerm.replace(/\s/g, "") } },
         ],
       }
     : {};
@@ -46,14 +46,14 @@ export default async function PatientsPage({
         }
       />
 
-      <PatientSearch initialQuery={query} />
+      <PatientSearch initialQuery={searchTerm} />
 
       {patients.length === 0 ? (
         <Card className="p-2">
           <EmptyState
             icon="person_off"
-            title={query ? "Niciun pacient găsit" : "Niciun pacient încă"}
-            hint={query ? "Încearcă alt termen de căutare." : "Adaugă primul pacient."}
+            title={searchTerm ? "Niciun pacient găsit" : "Niciun pacient încă"}
+            hint={searchTerm ? "Încearcă alt termen de căutare." : "Adaugă primul pacient."}
           />
         </Card>
       ) : (
