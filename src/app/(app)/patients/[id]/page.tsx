@@ -41,10 +41,6 @@ export default async function PatientDetailPage({
         <InfoRow icon="stethoscope" label="Medic asignat" value={patient.assignedDentist?.name || "—"} />
       </div>
       <Card className="p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant mb-1">Adresă</p>
-        <p className="text-sm">{patient.address || "—"}</p>
-      </Card>
-      <Card className="p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant mb-1">Alergii</p>
         <p className="text-sm">{patient.allergies || "Nicio alergie cunoscută"}</p>
       </Card>
