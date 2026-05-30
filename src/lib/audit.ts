@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import type { Prisma } from "@/generated/prisma";
+import type { Prisma } from "@prisma/client";
 
 /** Basic audit logging helper. Records sensitive actions on patient/medical data. */
 export async function logAudit(params: {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma";
+import { Prisma } from "@prisma/client";
 import { PageHeader, Card, EmptyState } from "@/components/ui";
 import { Icon } from "@/components/Icon";
 import { formatPhoneDisplay } from "@/lib/phone";

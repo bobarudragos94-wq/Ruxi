@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
 import { computeRecallDueDate, triggersRecall } from "@/lib/recall";
-import { InterventionType } from "@/generated/prisma";
+import { InterventionType } from "@prisma/client";
 
 const schema = z.object({
   dentistId: z.string().min(1, "Selectați medicul"),

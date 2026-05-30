@@ -7,7 +7,7 @@ import { Icon } from "./Icon";
 import { Badge } from "./ui";
 import { sendReminder } from "@/lib/actions/reminders";
 import { REMINDER_STATUS_LABELS } from "@/lib/constants";
-import type { ReminderStatus } from "@/generated/prisma";
+import type { ReminderStatus } from "@prisma/client";
 
 export function ReminderRow({
   id,

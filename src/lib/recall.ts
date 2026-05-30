@@ -1,4 +1,4 @@
-import { InterventionType } from "@/generated/prisma";
+import { InterventionType } from "@prisma/client";
 
 export const RECALL_MONTHS = 6;
 

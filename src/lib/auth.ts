@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
-import { Role } from "@/generated/prisma";
+import { Role } from "@prisma/client";
 
 const SESSION_COOKIE = "ruxi_session";
 const secret = new TextEncoder().encode(process.env.AUTH_SECRET || "dev-secret-change-me-please-32chars!!");

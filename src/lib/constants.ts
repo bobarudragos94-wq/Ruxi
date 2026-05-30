@@ -1,4 +1,4 @@
-import { InterventionType, AppointmentStatus, ReminderStatus, Role } from "@/generated/prisma";
+import { InterventionType, AppointmentStatus, ReminderStatus, Role } from "@prisma/client";
 
 /** Romanian UI labels for intervention types. */
 export const INTERVENTION_LABELS: Record<InterventionType, string> = {
