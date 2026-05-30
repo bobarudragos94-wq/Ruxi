@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import { getSession, destroySession } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";

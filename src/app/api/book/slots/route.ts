@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import { verifyBookingToken } from "@/lib/booking-token";
 import { getAvailableSlots } from "@/lib/slots";
