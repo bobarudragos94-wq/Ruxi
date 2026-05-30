@@ -1,7 +1,6 @@
-# Default (normal) build command — used for every deploy AFTER the first.
-# For the FIRST deploy, override the build command in the Netlify UI with:
-#   npm run deploy:init
-# (that one also runs `prisma db push` + `prisma db seed` to initialize the database).
+# Build command runs ONLY `next build` (postinstall handles `prisma generate`).
+# It does NOT touch the database — the DB was initialized via supabase/init.sql.
+# Make sure the Netlify UI build command is empty (or "npm run build") so this file is used.
 [build]
   command = "npm run build"
   publish = ".next"
