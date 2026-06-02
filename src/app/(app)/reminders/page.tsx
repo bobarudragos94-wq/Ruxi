@@ -1,5 +1,4 @@
-import { PageHeader, Card, Badge, EmptyState } from "@/components/ui";
-import { Icon } from "@/components/Icon";
+import { PageHeader, Card, Badge, EmptyState, SectionTitle } from "@/components/ui";
 import { ReminderRow } from "@/components/ReminderRow";
 import { getRecallCandidates } from "@/lib/recall-query";
 import { formatDateRo } from "@/lib/date";
@@ -23,11 +22,10 @@ export default async function RemindersPage() {
       />
 
       <Card className="overflow-hidden">
-        <div className="px-5 py-3 bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
-          <h2 className="font-semibold flex items-center gap-2">
-            <Icon name="notifications_active" className="text-primary" /> De rechemat
-          </h2>
-          <Badge tone="warning">{candidates.length}</Badge>
+        <div className="px-5 py-3 bg-gradient-to-r from-[#fff4e6] to-transparent border-b border-outline-variant">
+          <SectionTitle icon="notifications_active" tone="orange" className="" action={<Badge tone="warning">{candidates.length}</Badge>}>
+            De rechemat
+          </SectionTitle>
         </div>
         {candidates.length === 0 ? (
           <EmptyState

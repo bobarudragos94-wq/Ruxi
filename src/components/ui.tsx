@@ -4,14 +4,17 @@ export function Card({
   children,
   className = "",
   id,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
   id?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
       id={id}
+      style={style}
       className={`bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant ${className}`}
     >
       {children}
@@ -75,10 +78,12 @@ export function EmptyState({ icon, title, hint }: { icon: string; title: string;
 }
 
 const buttonVariants: Record<string, string> = {
-  primary: "bg-primary text-on-primary hover:bg-primary-container shadow-sm",
+  primary:
+    "bg-gradient-to-br from-[#0a84ff] to-[#005dac] text-white shadow-sm hover:shadow-md hover:brightness-105",
   secondary: "bg-surface-container-high text-on-surface hover:bg-surface-container-highest",
   outline: "border border-outline text-on-surface hover:bg-surface-container",
-  danger: "bg-error text-on-error hover:opacity-90",
+  danger: "bg-gradient-to-br from-[#ff5a5a] to-[#ba1a1a] text-white shadow-sm hover:brightness-105",
+  success: "bg-gradient-to-br from-[#00c389] to-[#00875a] text-white shadow-sm hover:brightness-105",
 };
 
 export function Button({
@@ -90,11 +95,61 @@ export function Button({
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: keyof typeof buttonVariants; icon?: string }) {
   return (
     <button
-      className={`h-12 px-5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${buttonVariants[variant]} ${className}`}
+      className={`h-12 px-5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed ${buttonVariants[variant]} ${className}`}
       {...props}
     >
       {icon && <Icon name={icon} className="!text-xl" />}
       {children}
     </button>
+  );
+}
+
+/** Colored icon chip used in section headers / list rows. */
+const chipTones: Record<string, string> = {
+  blue: "bg-[#e3f0ff] text-[#0a6cdc]",
+  green: "bg-[#d6f7ec] text-[#00875a]",
+  purple: "bg-[#ece6ff] text-[#6d4bf6]",
+  orange: "bg-[#ffeede] text-[#e06a00]",
+  pink: "bg-[#ffe3ef] text-[#d11b6b]",
+  neutral: "bg-surface-container-high text-on-surface-variant",
+};
+
+export function IconChip({
+  icon,
+  tone = "blue",
+  className = "",
+}: {
+  icon: string;
+  tone?: keyof typeof chipTones;
+  className?: string;
+}) {
+  return (
+    <span className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${chipTones[tone]} ${className}`}>
+      <Icon name={icon} filled className="!text-xl" />
+    </span>
+  );
+}
+
+export function SectionTitle({
+  icon,
+  tone = "blue",
+  children,
+  action,
+  className = "mb-4",
+}: {
+  icon: string;
+  tone?: keyof typeof chipTones;
+  children: React.ReactNode;
+  action?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`flex items-center justify-between ${className}`}>
+      <h2 className="font-semibold text-lg flex items-center gap-2.5">
+        <IconChip icon={icon} tone={tone} />
+        {children}
+      </h2>
+      {action}
+    </div>
   );
 }

@@ -91,11 +91,17 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-0.5 px-2 ${
+              className={`flex flex-col items-center justify-center gap-0.5 px-2 transition-colors ${
                 active ? "text-primary" : "text-on-surface-variant"
               }`}
             >
-              <Icon name={item.icon} filled={active} className="!text-2xl" />
+              <span
+                className={`flex items-center justify-center h-7 w-12 rounded-full transition-all ${
+                  active ? "bg-primary-fixed" : ""
+                }`}
+              >
+                <Icon name={item.icon} filled={active} className="!text-2xl" />
+              </span>
               <span className="text-[10px] font-medium">{item.label}</span>
             </Link>
           );

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Card, Badge } from "@/components/ui";
+import { Card, Badge, SectionTitle } from "@/components/ui";
 import { Icon } from "@/components/Icon";
 import { NewPatientAlert, type NewPatientLead } from "@/components/NewPatientAlert";
 import { formatTimeRo, formatDateRo, formatDateTimeRo } from "@/lib/date";
@@ -10,10 +10,10 @@ import { getRecallCandidates } from "@/lib/recall-query";
 export const dynamic = "force-dynamic";
 
 const QUICK_ACTIONS = [
-  { href: "/patients/new", label: "Pacient nou", icon: "person_add" },
-  { href: "/patients", label: "Caută pacient", icon: "search" },
-  { href: "/calendar", label: "Calendar", icon: "calendar_month" },
-  { href: "/reminders", label: "Remindere", icon: "notifications_active" },
+  { href: "/patients/new", label: "Pacient nou", icon: "person_add", gradient: "from-[#0a84ff] to-[#4cb3ff]" },
+  { href: "/patients", label: "Caută pacient", icon: "search", gradient: "from-[#00a884] to-[#34d1ad]" },
+  { href: "/calendar", label: "Calendar", icon: "calendar_month", gradient: "from-[#7c5cfc] to-[#a78bfa]" },
+  { href: "/reminders", label: "Remindere", icon: "notifications_active", gradient: "from-[#ff8a3d] to-[#ffb066]" },
 ];
 
 export default async function DashboardPage() {
@@ -73,7 +73,9 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Bună ziua 👋</h1>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Bună ziua <span className="inline-block">👋</span>
+        </h1>
         <p className="text-on-surface-variant mt-1">Iată ce se întâmplă azi în cabinet.</p>
       </div>
 
@@ -85,12 +87,17 @@ export default async function DashboardPage() {
           <Link
             key={a.href}
             href={a.href}
-            className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-3 hover:border-primary hover:shadow-sm transition-all"
+            className={`group relative overflow-hidden bg-gradient-to-br ${a.gradient} text-white rounded-2xl p-4 flex flex-col gap-3 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all`}
           >
-            <div className="w-10 h-10 rounded-lg bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
-              <Icon name={a.icon} />
+            <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+              <Icon name={a.icon} filled className="!text-2xl" />
             </div>
             <span className="font-semibold text-sm">{a.label}</span>
+            <Icon
+              name={a.icon}
+              filled
+              className="!text-7xl absolute -right-3 -bottom-3 opacity-15 pointer-events-none"
+            />
           </Link>
         ))}
       </div>
@@ -98,18 +105,30 @@ export default async function DashboardPage() {
       {/* Dentist cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {dentistCounts.map(({ dentist, today }) => (
-          <Card key={dentist.id} className="p-5 flex items-center gap-4">
+          <Card
+            key={dentist.id}
+            className="p-5 flex items-center gap-4 relative overflow-hidden border-l-4"
+            style={{ borderLeftColor: dentist.color }}
+          >
+            <span
+              className="absolute inset-0 opacity-[0.06] pointer-events-none"
+              style={{ backgroundColor: dentist.color }}
+            />
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
+              className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shadow-sm relative"
               style={{ backgroundColor: dentist.color }}
             >
               {dentist.name.charAt(0)}
             </div>
-            <div className="flex-1">
+            <div className="flex-1 relative">
               <p className="font-semibold">{dentist.name}</p>
               <p className="text-sm text-on-surface-variant">{today} programări azi</p>
             </div>
-            <Link href="/calendar" className="text-primary text-sm font-medium flex items-center gap-1">
+            <Link
+              href="/calendar"
+              className="relative text-sm font-semibold flex items-center gap-1 px-3 py-1.5 rounded-full text-white shadow-sm hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: dentist.color }}
+            >
               Calendar <Icon name="chevron_right" className="!text-lg" />
             </Link>
           </Card>
@@ -119,12 +138,9 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Today */}
         <Card className="p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-lg flex items-center gap-2">
-              <Icon name="today" className="text-primary" /> Programări azi
-            </h2>
-            <Badge tone="primary">{todays.length}</Badge>
-          </div>
+          <SectionTitle icon="today" tone="blue" action={<Badge tone="primary">{todays.length}</Badge>}>
+            Programări azi
+          </SectionTitle>
           {todays.length === 0 ? (
             <p className="text-sm text-on-surface-variant py-6 text-center">Nicio programare azi.</p>
           ) : (
@@ -153,9 +169,9 @@ export default async function DashboardPage() {
 
         {/* Upcoming */}
         <Card className="p-5">
-          <h2 className="font-semibold text-lg flex items-center gap-2 mb-4">
-            <Icon name="event_upcoming" className="text-primary" /> Programări viitoare
-          </h2>
+          <SectionTitle icon="event_upcoming" tone="purple">
+            Programări viitoare
+          </SectionTitle>
           {upcoming.length === 0 ? (
             <p className="text-sm text-on-surface-variant py-6 text-center">Nicio programare viitoare.</p>
           ) : (
@@ -181,14 +197,17 @@ export default async function DashboardPage() {
 
       {/* Recalls */}
       <Card className="p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-lg flex items-center gap-2">
-            <Icon name="event_repeat" className="text-primary" /> Recall la 6 luni
-          </h2>
-          <Link href="/reminders" className="text-primary text-sm font-medium">
-            Vezi toate
-          </Link>
-        </div>
+        <SectionTitle
+          icon="event_repeat"
+          tone="orange"
+          action={
+            <Link href="/reminders" className="text-primary text-sm font-medium">
+              Vezi toate
+            </Link>
+          }
+        >
+          Recall la 6 luni
+        </SectionTitle>
         {recalls.length === 0 ? (
           <p className="text-sm text-on-surface-variant py-6 text-center">Niciun pacient de rechemat momentan.</p>
         ) : (
