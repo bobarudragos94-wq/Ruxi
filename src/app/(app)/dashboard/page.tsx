@@ -74,7 +74,7 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Bună ziua <span className="inline-block">👋</span>
+          Bună ziua
         </h1>
         <p className="text-on-surface-variant mt-1">Iată ce se întâmplă azi în cabinet.</p>
       </div>
