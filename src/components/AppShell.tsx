@@ -10,11 +10,11 @@ import type { SessionUser } from "@/lib/auth";
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand";
 
 const NAV = [
-  { href: "/dashboard", label: "Acasă", icon: "dashboard" },
-  { href: "/patients", label: "Pacienți", icon: "person_search" },
-  { href: "/calendar", label: "Calendar", icon: "calendar_month" },
-  { href: "/reminders", label: "Remindere", icon: "notifications_active" },
-  { href: "/settings", label: "Setări", icon: "settings" },
+  { href: "/dashboard", label: "Acasă", icon: "dashboard", gradient: "from-[#0a84ff] to-[#005dac]", chip: "bg-[#e3f0ff] text-[#0a6cdc]" },
+  { href: "/patients", label: "Pacienți", icon: "person_search", gradient: "from-[#00c389] to-[#00875a]", chip: "bg-[#d6f7ec] text-[#00875a]" },
+  { href: "/calendar", label: "Calendar", icon: "calendar_month", gradient: "from-[#7c5cfc] to-[#5b34e0]", chip: "bg-[#ece6ff] text-[#6d4bf6]" },
+  { href: "/reminders", label: "Remindere", icon: "notifications_active", gradient: "from-[#ff8a3d] to-[#e06a00]", chip: "bg-[#ffeede] text-[#e06a00]" },
+  { href: "/settings", label: "Setări", icon: "settings", gradient: "from-[#ff5d8f] to-[#d11b6b]", chip: "bg-[#ffe3ef] text-[#d11b6b]" },
 ];
 
 function isActive(pathname: string, href: string): boolean {
@@ -43,20 +43,28 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
             <p className="text-xs text-on-surface-variant">{BRAND_TAGLINE}</p>
           </div>
         </Link>
-        <nav className="flex flex-col gap-1 px-3 flex-1">
+        <nav className="flex flex-col gap-1.5 px-3 flex-1">
           {NAV.map((item) => {
             const active = isActive(pathname, item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                   active
-                    ? "bg-primary-fixed text-on-primary-fixed font-semibold"
+                    ? `bg-gradient-to-r ${item.gradient} text-white font-semibold shadow-md`
                     : "text-on-surface-variant hover:bg-surface-container-high"
                 }`}
               >
-                <Icon name={item.icon} filled={active} />
+                <span
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+                    active
+                      ? "bg-white/20 text-white"
+                      : `${item.chip} group-hover:scale-105`
+                  }`}
+                >
+                  <Icon name={item.icon} filled={active} className="!text-xl" />
+                </span>
                 <span className="text-sm">{item.label}</span>
               </Link>
             );
@@ -92,12 +100,12 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center gap-0.5 px-2 transition-colors ${
-                active ? "text-primary" : "text-on-surface-variant"
+                active ? "text-on-surface font-semibold" : "text-on-surface-variant"
               }`}
             >
               <span
-                className={`flex items-center justify-center h-7 w-12 rounded-full transition-all ${
-                  active ? "bg-primary-fixed" : ""
+                className={`flex items-center justify-center h-8 w-12 rounded-full transition-all ${
+                  active ? `bg-gradient-to-br ${item.gradient} text-white shadow-md` : ""
                 }`}
               >
                 <Icon name={item.icon} filled={active} className="!text-2xl" />

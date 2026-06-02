@@ -12,18 +12,18 @@ export function Tabs({ items, initial }: { items: TabItem[]; initial?: string })
 
   return (
     <div>
-      <div className="flex gap-1 border-b border-outline-variant overflow-x-auto no-scrollbar">
+      <div className="flex gap-2 overflow-x-auto no-scrollbar p-1.5 bg-surface-container rounded-2xl">
         {items.map((t) => (
           <button
             key={t.id}
             onClick={() => setActive(t.id)}
-            className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors flex items-center gap-2 ${
+            className={`px-4 py-2.5 text-sm font-semibold whitespace-nowrap rounded-xl transition-all flex items-center gap-2 ${
               active === t.id
-                ? "border-primary text-primary"
-                : "border-transparent text-on-surface-variant hover:text-on-surface"
+                ? "bg-gradient-to-br from-[#0a84ff] to-[#005dac] text-white shadow-md scale-[1.02]"
+                : "text-on-surface-variant hover:bg-surface-container-high"
             }`}
           >
-            {t.icon && <Icon name={t.icon} className="!text-lg" />}
+            {t.icon && <Icon name={t.icon} filled={active === t.id} className="!text-lg" />}
             {t.label}
           </button>
         ))}
