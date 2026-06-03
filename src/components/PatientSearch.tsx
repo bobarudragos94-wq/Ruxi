@@ -31,7 +31,6 @@ export function PatientSearch({ initialQuery }: { initialQuery: string }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Caută după nume sau telefon..."
-        autoFocus
         className="w-full h-12 pl-12 pr-10 bg-surface-container-lowest border border-outline rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none"
       />
       {value && (
