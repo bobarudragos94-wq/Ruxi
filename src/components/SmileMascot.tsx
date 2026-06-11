@@ -77,30 +77,43 @@ export function SmileMascot() {
             <circle className="mascot-foam" cx="74" cy="10" r="2.2" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "1s" }} />
           </g>
 
-          {/* Sparkle bursts right after the shine sweep */}
-          <g transform="translate(40 28)">
-            <path className="mascot-burst" d="M0 -6 L1.8 -1.8 L6 0 L1.8 1.8 L0 6 L-1.8 1.8 L-6 0 L-1.8 -1.8 Z" fill="#ffc94d" />
+          {/* Golden star-lets twinkling across the tooth after brushing —
+              the "perfectly polished" moment (gold on white for contrast) */}
+          <g transform="translate(42 28)">
+            <path className="mascot-burst" d="M0 -5 L1.5 -1.5 L5 0 L1.5 1.5 L0 5 L-1.5 1.5 L-5 0 L-1.5 -1.5 Z" fill="#ffb300" />
           </g>
-          <g transform="translate(76 36)">
-            <path className="mascot-burst" d="M0 -5 L1.5 -1.5 L5 0 L1.5 1.5 L0 5 L-1.5 1.5 L-5 0 L-1.5 -1.5 Z" fill="#ffffff" style={{ animationDelay: "0.15s" }} />
+          <g transform="translate(56 22)">
+            <path className="mascot-burst" d="M0 -3.5 L1.1 -1.1 L3.5 0 L1.1 1.1 L0 3.5 L-1.1 1.1 L-3.5 0 L-1.1 -1.1 Z" fill="#ffc94d" style={{ animationDelay: "0.18s" }} />
           </g>
-          <g transform="translate(60 20)">
-            <path className="mascot-burst" d="M0 -4 L1.2 -1.2 L4 0 L1.2 1.2 L0 4 L-1.2 1.2 L-4 0 L-1.2 -1.2 Z" fill="#ffc94d" style={{ animationDelay: "0.3s" }} />
+          <g transform="translate(70 30)">
+            <path className="mascot-burst" d="M0 -4.5 L1.4 -1.4 L4.5 0 L1.4 1.4 L0 4.5 L-1.4 1.4 L-4.5 0 L-1.4 -1.4 Z" fill="#ffb300" style={{ animationDelay: "0.36s" }} />
+          </g>
+          <g transform="translate(80 42)">
+            <path className="mascot-burst" d="M0 -3 L1 -1 L3 0 L1 1 L0 3 L-1 1 L-3 0 L-1 -1 Z" fill="#ffe08a" style={{ animationDelay: "0.5s" }} />
+          </g>
+          <g transform="translate(38 40)">
+            <path className="mascot-burst" d="M0 -3.2 L1 -1 L3.2 0 L1 1 L0 3.2 L-1 1 L-3.2 0 L-1 -1 Z" fill="#ffc94d" style={{ animationDelay: "0.62s" }} />
+          </g>
+          <g transform="translate(61 34)">
+            <path className="mascot-burst" d="M0 -2.6 L0.8 -0.8 L2.6 0 L0.8 0.8 L0 2.6 L-0.8 0.8 L-2.6 0 L-0.8 -0.8 Z" fill="#ffe08a" style={{ animationDelay: "0.26s" }} />
+          </g>
+          <g transform="translate(50 68)">
+            <path className="mascot-burst" d="M0 -2.8 L0.9 -0.9 L2.8 0 L0.9 0.9 L0 2.8 L-0.9 0.9 L-2.8 0 L-0.9 -0.9 Z" fill="#ffc94d" style={{ animationDelay: "0.74s" }} />
           </g>
 
-          {/* Toothbrush: head + bristles on the left, handle extends right.
-              Bristle tips sit at local y=17 and scrub the crown top. */}
+          {/* Toothbrush: head + bristles point DOWN onto the crown, handle
+              extends right. Bristle tips sit at local y=17. */}
           <g className="mascot-brush">
-            {/* Bristles */}
-            <rect x="-1" y="0" width="2.6" height="9" rx="1" fill="#dbeafe" />
-            <rect x="3" y="0" width="2.6" height="9" rx="1" fill="#eaf3ff" />
-            <rect x="7" y="0" width="2.6" height="9" rx="1" fill="#dbeafe" />
-            <rect x="11" y="0" width="2.6" height="9" rx="1" fill="#eaf3ff" />
-            <rect x="15" y="0" width="2.6" height="9" rx="1" fill="#dbeafe" />
-            {/* Head */}
-            <rect x="-4" y="8" width="25" height="8" rx="4" fill="#4ba3ff" />
             {/* Handle */}
-            <rect x="16" y="8.8" width="46" height="6.4" rx="3.2" fill="url(#brushGrad)" />
+            <rect x="16" y="0.8" width="46" height="6.4" rx="3.2" fill="url(#brushGrad)" />
+            {/* Head */}
+            <rect x="-4" y="0" width="25" height="8" rx="4" fill="#4ba3ff" />
+            {/* Bristles (below the head, toward the tooth) */}
+            <rect x="-1" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
+            <rect x="3" y="8" width="2.6" height="9" rx="1" fill="#eaf3ff" />
+            <rect x="7" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
+            <rect x="11" y="8" width="2.6" height="9" rx="1" fill="#eaf3ff" />
+            <rect x="15" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
           </g>
         </g>
 
