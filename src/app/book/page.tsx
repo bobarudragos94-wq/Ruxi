@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { Field, Input } from "@/components/Field";
 import { Button } from "@/components/ui";
+import { SmileMascot } from "@/components/SmileMascot";
 import { BRAND_NAME } from "@/lib/brand";
 
 const HIGHLIGHTS = [
@@ -87,7 +88,11 @@ export default function BookPage() {
   return (
     <div className="space-y-14 md:space-y-20">
       {/* HERO */}
-      <section className="text-center pt-4 md:pt-10">
+      <section className="text-center pt-2 md:pt-6">
+        <div className="animate-scale-in mb-2">
+          <SmileMascot />
+        </div>
+
         <div className="animate-fade-up inline-flex items-center gap-2 bg-primary-fixed/70 text-on-primary-fixed-variant text-sm font-semibold px-4 py-1.5 rounded-full mb-5">
           <span className="relative flex w-2 h-2">
             <span className="absolute inline-flex w-full h-full rounded-full bg-[#00c389] animate-pulse-ring" />
