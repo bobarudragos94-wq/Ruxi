@@ -107,9 +107,54 @@ body {
   50% { transform: translateY(-7px) rotate(2.5deg); }
 }
 
-@keyframes mascot-blink {
-  0%, 91%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.08); }
+/* Synced blinks on the 12s scene clock; the wink variant closes in act 3. */
+@keyframes mascot-eye-cycle {
+  0%, 18% { transform: scaleY(1); }
+  19% { transform: scaleY(0.08); }
+  20%, 49% { transform: scaleY(1); }
+  50% { transform: scaleY(0.08); }
+  51%, 100% { transform: scaleY(1); }
+}
+
+@keyframes mascot-eye-wink {
+  0%, 18% { transform: scaleY(1); }
+  19% { transform: scaleY(0.08); }
+  20%, 49% { transform: scaleY(1); }
+  50% { transform: scaleY(0.08); }
+  51%, 72% { transform: scaleY(1); }
+  74%, 86% { transform: scaleY(0.12); }
+  88%, 100% { transform: scaleY(1); }
+}
+
+@keyframes mascot-smile-grow {
+  0%, 72% { transform: scale(1); }
+  78%, 88% { transform: scale(1.18); }
+  94%, 100% { transform: scale(1); }
+}
+
+@keyframes mascot-ring-orbit {
+  0%, 32% { opacity: 0; transform: rotate(-20deg); }
+  37% { opacity: 1; }
+  60% { opacity: 1; transform: rotate(150deg); }
+  66%, 100% { opacity: 0; transform: rotate(190deg); }
+}
+
+@keyframes mascot-heart-pop {
+  0%, 73% { opacity: 0; transform: translateY(0) scale(0); }
+  77% { opacity: 1; transform: translateY(-2px) scale(1.25); }
+  84% { opacity: 1; transform: translateY(-5px) scale(1); }
+  92%, 100% { opacity: 0; transform: translateY(-10px) scale(0.7); }
+}
+
+@keyframes mascot-leaf-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes mascot-caption-cycle {
+  0% { opacity: 0; transform: translateY(8px); }
+  4%, 28% { opacity: 1; transform: translateY(0); }
+  33%, 100% { opacity: 0; transform: translateY(-8px); }
 }
 
 @keyframes mascot-smile-draw {
@@ -130,10 +175,41 @@ body {
   animation: mascot-float 5s ease-in-out infinite;
   transform-origin: 60px 60px;
 }
-.mascot-eye {
-  animation: mascot-blink 4.5s ease-in-out infinite;
+.mascot-eye-cycle {
+  animation: mascot-eye-cycle 12s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
+}
+.mascot-eye-wink {
+  animation: mascot-eye-wink 12s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mascot-smile-big {
+  animation: mascot-smile-grow 12s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mascot-ring {
+  opacity: 0;
+  animation: mascot-ring-orbit 12s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mascot-heart {
+  opacity: 0;
+  animation: mascot-heart-pop 12s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mascot-leaf {
+  animation: mascot-leaf-sway 6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.mascot-caption {
+  opacity: 0;
+  animation: mascot-caption-cycle 12s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 .mascot-smile {
   stroke-dasharray: 32;
@@ -149,66 +225,67 @@ body {
   animation: mascot-halo-pulse 4s ease-in-out infinite;
 }
 
-/* --- Brushing scene: one shared 7s loop ---
-   ~0-9%  brush slides in   ~9-42% scrubs (foam pops)
-   ~42-52% brush exits      ~55-70% shine sweeps   ~60-76% star bursts */
+/* --- Three-act scene: one shared 12s loop ---
+   Act 1 (0-33%)  brush slides in, scrubs (foam), exits
+   Act 2 (33-66%) lamination sweep, golden star-lets, orbiting ring
+   Act 3 (66-100%) wink, bigger smile, heart pop */
 
 @keyframes mascot-brush-scrub {
   0% { transform: translate(150px, -14px) rotate(10deg); }
-  9%, 11% { transform: translate(62px, 4px) rotate(6deg); }
-  16% { transform: translate(34px, 7px) rotate(2deg); }
-  21% { transform: translate(62px, 3px) rotate(7deg); }
-  26% { transform: translate(34px, 7px) rotate(2deg); }
-  31% { transform: translate(62px, 3px) rotate(7deg); }
-  36% { transform: translate(34px, 7px) rotate(2deg); }
-  42% { transform: translate(56px, 4px) rotate(6deg); }
-  52%, 100% { transform: translate(150px, -16px) rotate(14deg); }
+  4%, 6% { transform: translate(62px, 4px) rotate(6deg); }
+  9% { transform: translate(34px, 7px) rotate(2deg); }
+  12% { transform: translate(62px, 3px) rotate(7deg); }
+  15% { transform: translate(34px, 7px) rotate(2deg); }
+  18% { transform: translate(62px, 3px) rotate(7deg); }
+  21% { transform: translate(34px, 7px) rotate(2deg); }
+  24% { transform: translate(56px, 4px) rotate(6deg); }
+  30%, 100% { transform: translate(150px, -16px) rotate(14deg); }
 }
 
 @keyframes mascot-foam-pop {
-  0%, 13% { opacity: 0; transform: translateY(2px) scale(0.4); }
-  20% { opacity: 0.95; transform: translateY(-1px) scale(1); }
-  36% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
-  46%, 100% { opacity: 0; transform: translateY(-9px) scale(1.15); }
+  0%, 7% { opacity: 0; transform: translateY(2px) scale(0.4); }
+  11% { opacity: 0.95; transform: translateY(-1px) scale(1); }
+  20% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
+  27%, 100% { opacity: 0; transform: translateY(-9px) scale(1.15); }
 }
 
 @keyframes mascot-shine-sweep {
-  0%, 55% { transform: translateX(0) skewX(-14deg); opacity: 0; }
-  58% { opacity: 0.75; }
-  68% { transform: translateX(160px) skewX(-14deg); opacity: 0.75; }
-  69%, 100% { transform: translateX(160px) skewX(-14deg); opacity: 0; }
+  0%, 33% { transform: translateX(0) skewX(-14deg); opacity: 0; }
+  35% { opacity: 0.75; }
+  42% { transform: translateX(160px) skewX(-14deg); opacity: 0.75; }
+  43%, 100% { transform: translateX(160px) skewX(-14deg); opacity: 0; }
 }
 
 /* Double twinkle: pop in, dim, flash again, fade — the "perfect polish" look. */
 @keyframes mascot-burst-pop {
-  0%, 57% { opacity: 0; transform: scale(0) rotate(0deg); }
-  63% { opacity: 1; transform: scale(1.25) rotate(14deg); }
-  69% { opacity: 0.45; transform: scale(0.7) rotate(22deg); }
-  75% { opacity: 1; transform: scale(1.1) rotate(32deg); }
-  83%, 100% { opacity: 0; transform: scale(0) rotate(45deg); }
+  0%, 36% { opacity: 0; transform: scale(0) rotate(0deg); }
+  40% { opacity: 1; transform: scale(1.25) rotate(14deg); }
+  44% { opacity: 0.45; transform: scale(0.7) rotate(22deg); }
+  48% { opacity: 1; transform: scale(1.1) rotate(32deg); }
+  54%, 100% { opacity: 0; transform: scale(0) rotate(45deg); }
 }
 
 /* Static fallbacks keep scene elements hidden/offscreen when animations are off. */
 .mascot-brush {
   transform: translate(150px, -16px) rotate(14deg);
-  animation: mascot-brush-scrub 7s ease-in-out infinite;
+  animation: mascot-brush-scrub 12s ease-in-out infinite;
 }
 .mascot-foam {
   opacity: 0;
   transform-box: fill-box;
   transform-origin: center;
-  animation: mascot-foam-pop 7s ease-in-out infinite;
+  animation: mascot-foam-pop 12s ease-in-out infinite;
 }
 .mascot-shine-sweep {
   opacity: 0;
   transform: skewX(-14deg);
-  animation: mascot-shine-sweep 7s ease-in-out infinite;
+  animation: mascot-shine-sweep 12s ease-in-out infinite;
 }
 .mascot-burst {
   opacity: 0;
   transform-box: fill-box;
   transform-origin: center;
-  animation: mascot-burst-pop 7s ease-in-out infinite;
+  animation: mascot-burst-pop 12s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -221,14 +298,24 @@ body {
   .animate-pulse-ring,
   .animate-slide-up-sheet,
   .mascot-float,
-  .mascot-eye,
+  .mascot-eye-cycle,
+  .mascot-eye-wink,
   .mascot-sparkle,
   .mascot-halo,
   .mascot-brush,
   .mascot-foam,
   .mascot-shine-sweep,
-  .mascot-burst {
+  .mascot-burst,
+  .mascot-smile-big,
+  .mascot-ring,
+  .mascot-heart,
+  .mascot-leaf,
+  .mascot-caption {
     animation: none;
+  }
+  /* Show the first caption statically when the cycle is disabled. */
+  .mascot-caption:first-of-type {
+    opacity: 1;
   }
   /* Keep the smile visible when its draw-in animation is disabled. */
   .mascot-smile {

@@ -1,21 +1,50 @@
 /**
- * Friendly animated tooth mascot for the public booking hero.
- * Pure SVG + CSS keyframes (see globals.css). One 7s looping scene:
- * a toothbrush slides in and scrubs the tooth (with foam), exits,
- * then a shine sweeps across the tooth and sparkle bursts pop.
- * The tooth itself floats gently, blinks and draws its smile in.
+ * Animated tooth mascot for the public booking hero — a 12s looping,
+ * three-act scene with fluid transitions (pure SVG + CSS, no GIF):
+ *   Act 1 (0-33%)  "Îngrijire dentară"        — toothbrush scrubs, foam pops
+ *   Act 2 (33-66%) "Zâmbete sănătoase"        — golden sparkle ring orbits,
+ *                                               star-lets twinkle, shine sweep
+ *   Act 3 (66-100%) "Dentistul tău prietenos" — the tooth winks, a heart pops
+ * The tooth floats over a mint pedestal with swaying leaves; captions
+ * crossfade in sync. Keyframes live in globals.css.
  */
 
 const TOOTH_PATH =
   "M60 16 C38 16 28 32 30 52 C32 74 40 102 49 102 C56 102 55 78 60 78 C65 78 64 102 71 102 C80 102 88 74 90 52 C92 32 82 16 60 16 Z";
 
+const STAR = (s: number) =>
+  `M0 ${-s} L${s * 0.3} ${-s * 0.3} L${s} 0 L${s * 0.3} ${s * 0.3} L0 ${s} L${-s * 0.3} ${s * 0.3} L${-s} 0 L${-s * 0.3} ${-s * 0.3} Z`;
+
+/** Ring of golden star-lets orbiting the tooth (act 2). */
+const RING_STARS: { x: number; y: number; size: number; fill: string }[] = [
+  { x: 102, y: 52, size: 3.2, fill: "#ffb300" },
+  { x: 90, y: 63, size: 2, fill: "#ffc94d" },
+  { x: 60, y: 68, size: 2.8, fill: "#ffb300" },
+  { x: 30, y: 63, size: 1.8, fill: "#ffe08a" },
+  { x: 18, y: 52, size: 3, fill: "#ffc94d" },
+  { x: 30, y: 41, size: 2, fill: "#ffb300" },
+  { x: 60, y: 36, size: 1.6, fill: "#ffe08a" },
+  { x: 90, y: 41, size: 2.4, fill: "#ffc94d" },
+];
+
+/** Star-lets twinkling on the tooth surface itself (act 2). */
+const POLISH_STARS: { x: number; y: number; size: number; fill: string; delay?: string }[] = [
+  { x: 42, y: 28, size: 5, fill: "#ffb300" },
+  { x: 56, y: 22, size: 3.5, fill: "#ffc94d", delay: "0.18s" },
+  { x: 70, y: 30, size: 4.5, fill: "#ffb300", delay: "0.36s" },
+  { x: 80, y: 42, size: 3, fill: "#ffe08a", delay: "0.5s" },
+  { x: 38, y: 40, size: 3.2, fill: "#ffc94d", delay: "0.62s" },
+  { x: 61, y: 34, size: 2.6, fill: "#ffe08a", delay: "0.26s" },
+  { x: 50, y: 68, size: 2.8, fill: "#ffc94d", delay: "0.74s" },
+];
+
 export function SmileMascot() {
   return (
-    <div className="relative w-40 h-40 md:w-52 md:h-52 mx-auto select-none" aria-hidden>
+    <div className="relative w-44 h-52 md:w-56 md:h-64 mx-auto select-none" aria-hidden>
       {/* Pulsing gradient halo behind the tooth */}
-      <div className="mascot-halo absolute inset-3 rounded-full bg-gradient-to-br from-[#0a84ff]/25 via-[#00c389]/15 to-[#6d4bf6]/20 blur-2xl" />
+      <div className="mascot-halo absolute inset-x-3 top-3 bottom-10 rounded-full bg-gradient-to-br from-[#0a84ff]/25 via-[#00c389]/15 to-[#6d4bf6]/20 blur-2xl" />
 
-      <svg viewBox="0 0 120 120" className="relative w-full h-full">
+      <svg viewBox="0 0 120 126" className="relative w-full h-[calc(100%-1.75rem)]">
         <defs>
           <linearGradient id="toothGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
@@ -25,6 +54,10 @@ export function SmileMascot() {
           <linearGradient id="brushGrad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#4ba3ff" />
             <stop offset="100%" stopColor="#005dac" />
+          </linearGradient>
+          <linearGradient id="pedestalGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#d6f7ec" />
+            <stop offset="100%" stopColor="#a9e8d2" />
           </linearGradient>
           <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
@@ -36,6 +69,16 @@ export function SmileMascot() {
           </clipPath>
         </defs>
 
+        {/* Mint pedestal with leaves (site palette) */}
+        <ellipse cx="60" cy="109" rx="36" ry="8" fill="#8fdec0" opacity="0.55" />
+        <ellipse cx="60" cy="106" rx="34" ry="7.5" fill="url(#pedestalGrad)" />
+        <g className="mascot-leaf">
+          <path d="M24 104 C16 96 14 88 18 82 C26 84 30 92 28 102 Z" fill="#7fd8b8" opacity="0.9" />
+        </g>
+        <g className="mascot-leaf" style={{ animationDelay: "1.2s" }}>
+          <path d="M96 104 C104 96 106 88 102 82 C94 84 90 92 92 102 Z" fill="#5ecda6" opacity="0.9" />
+        </g>
+
         <g className="mascot-float">
           {/* Tooth body */}
           <path
@@ -46,69 +89,74 @@ export function SmileMascot() {
           {/* Static shine */}
           <ellipse cx="44" cy="32" rx="7" ry="11" fill="#ffffff" opacity="0.85" transform="rotate(-24 44 32)" />
 
-          {/* Eyes (blink) */}
-          <circle className="mascot-eye" cx="47" cy="48" r="3.6" fill="#143a5e" />
-          <circle className="mascot-eye" cx="73" cy="48" r="3.6" fill="#143a5e" />
+          {/* Eyes: synced blinks; the right eye winks in act 3 */}
+          <circle className="mascot-eye-cycle" cx="47" cy="48" r="3.6" fill="#143a5e" />
+          <circle className="mascot-eye-wink" cx="73" cy="48" r="3.6" fill="#143a5e" />
 
           {/* Cheeks */}
           <circle cx="39" cy="57" r="4.2" fill="#ff8fb1" opacity="0.45" />
           <circle cx="81" cy="57" r="4.2" fill="#ff8fb1" opacity="0.45" />
 
-          {/* Smile (draws itself in) */}
-          <path
-            className="mascot-smile"
-            d="M48 59 Q60 71 72 59"
-            fill="none"
-            stroke="#143a5e"
-            strokeWidth="3.4"
-            strokeLinecap="round"
-          />
+          {/* Smile (draws itself in, widens during the wink) */}
+          <g className="mascot-smile-big">
+            <path
+              className="mascot-smile"
+              d="M48 59 Q60 71 72 59"
+              fill="none"
+              stroke="#143a5e"
+              strokeWidth="3.4"
+              strokeLinecap="round"
+            />
+          </g>
 
-          {/* Shine sweep across the tooth after brushing (clipped to tooth shape) */}
+          {/* Lamination sweep across the tooth at the start of act 2 */}
           <g clipPath="url(#toothClip)">
             <rect className="mascot-shine-sweep" x="-34" y="8" width="24" height="100" fill="url(#shineGrad)" />
           </g>
 
-          {/* Foam bubbles while scrubbing */}
+          {/* Foam bubbles while scrubbing (act 1) */}
           <g>
             <circle className="mascot-foam" cx="46" cy="15" r="3" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" />
-            <circle className="mascot-foam" cx="56" cy="11" r="2.4" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "0.35s" }} />
-            <circle className="mascot-foam" cx="66" cy="14" r="3.4" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "0.7s" }} />
-            <circle className="mascot-foam" cx="74" cy="10" r="2.2" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "1s" }} />
+            <circle className="mascot-foam" cx="56" cy="11" r="2.4" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "0.5s" }} />
+            <circle className="mascot-foam" cx="66" cy="14" r="3.4" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "1s" }} />
+            <circle className="mascot-foam" cx="74" cy="10" r="2.2" fill="#ffffff" stroke="#cfe3ff" strokeWidth="0.8" style={{ animationDelay: "1.5s" }} />
           </g>
 
-          {/* Golden star-lets twinkling across the tooth after brushing —
-              the "perfectly polished" moment (gold on white for contrast) */}
-          <g transform="translate(42 28)">
-            <path className="mascot-burst" d="M0 -5 L1.5 -1.5 L5 0 L1.5 1.5 L0 5 L-1.5 1.5 L-5 0 L-1.5 -1.5 Z" fill="#ffb300" />
-          </g>
-          <g transform="translate(56 22)">
-            <path className="mascot-burst" d="M0 -3.5 L1.1 -1.1 L3.5 0 L1.1 1.1 L0 3.5 L-1.1 1.1 L-3.5 0 L-1.1 -1.1 Z" fill="#ffc94d" style={{ animationDelay: "0.18s" }} />
-          </g>
-          <g transform="translate(70 30)">
-            <path className="mascot-burst" d="M0 -4.5 L1.4 -1.4 L4.5 0 L1.4 1.4 L0 4.5 L-1.4 1.4 L-4.5 0 L-1.4 -1.4 Z" fill="#ffb300" style={{ animationDelay: "0.36s" }} />
-          </g>
-          <g transform="translate(80 42)">
-            <path className="mascot-burst" d="M0 -3 L1 -1 L3 0 L1 1 L0 3 L-1 1 L-3 0 L-1 -1 Z" fill="#ffe08a" style={{ animationDelay: "0.5s" }} />
-          </g>
-          <g transform="translate(38 40)">
-            <path className="mascot-burst" d="M0 -3.2 L1 -1 L3.2 0 L1 1 L0 3.2 L-1 1 L-3.2 0 L-1 -1 Z" fill="#ffc94d" style={{ animationDelay: "0.62s" }} />
-          </g>
-          <g transform="translate(61 34)">
-            <path className="mascot-burst" d="M0 -2.6 L0.8 -0.8 L2.6 0 L0.8 0.8 L0 2.6 L-0.8 0.8 L-2.6 0 L-0.8 -0.8 Z" fill="#ffe08a" style={{ animationDelay: "0.26s" }} />
-          </g>
-          <g transform="translate(50 68)">
-            <path className="mascot-burst" d="M0 -2.8 L0.9 -0.9 L2.8 0 L0.9 0.9 L0 2.8 L-0.9 0.9 L-2.8 0 L-0.9 -0.9 Z" fill="#ffc94d" style={{ animationDelay: "0.74s" }} />
+          {/* Golden star-lets twinkling on the white crown (act 2) */}
+          {POLISH_STARS.map((s, i) => (
+            <g key={`p${i}`} transform={`translate(${s.x} ${s.y})`}>
+              <path
+                className="mascot-burst"
+                d={STAR(s.size)}
+                fill={s.fill}
+                style={s.delay ? { animationDelay: s.delay } : undefined}
+              />
+            </g>
+          ))}
+
+          {/* Orbiting sparkle ring (act 2) */}
+          <g className="mascot-ring">
+            {RING_STARS.map((s, i) => (
+              <g key={`r${i}`} transform={`translate(${s.x} ${s.y})`}>
+                <path d={STAR(s.size)} fill={s.fill} />
+              </g>
+            ))}
           </g>
 
-          {/* Toothbrush: head + bristles point DOWN onto the crown, handle
-              extends right. Bristle tips sit at local y=17. */}
+          {/* Heart popping by the cheek during the wink (act 3) */}
+          <g transform="translate(92 38)">
+            <path
+              className="mascot-heart"
+              d="M0 -2.4 C-1.2 -4.4 -4.8 -4 -4.8 -1.2 C-4.8 1.2 -1.6 3.2 0 4.8 C1.6 3.2 4.8 1.2 4.8 -1.2 C4.8 -4 1.2 -4.4 0 -2.4 Z"
+              fill="#ff6b9d"
+            />
+          </g>
+
+          {/* Toothbrush: bristles point DOWN onto the crown, handle extends
+              right. Bristle tips sit at local y=17. */}
           <g className="mascot-brush">
-            {/* Handle */}
             <rect x="16" y="0.8" width="46" height="6.4" rx="3.2" fill="url(#brushGrad)" />
-            {/* Head */}
             <rect x="-4" y="0" width="25" height="8" rx="4" fill="#4ba3ff" />
-            {/* Bristles (below the head, toward the tooth) */}
             <rect x="-1" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
             <rect x="3" y="8" width="2.6" height="9" rx="1" fill="#eaf3ff" />
             <rect x="7" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
@@ -117,41 +165,39 @@ export function SmileMascot() {
           </g>
         </g>
 
-        {/* Ambient twinkling sparkles (positioned via the outer <g>; the CSS
-            scale/rotate animation lives on the inner path so it doesn't
-            override placement) */}
+        {/* Ambient twinkling sparkles */}
         <g transform="translate(19 28)">
-          <path
-            className="mascot-sparkle"
-            d="M0 -6 L1.8 -1.8 L6 0 L1.8 1.8 L0 6 L-1.8 1.8 L-6 0 L-1.8 -1.8 Z"
-            fill="#ffc94d"
-          />
+          <path className="mascot-sparkle" d={STAR(6)} fill="#ffc94d" />
         </g>
         <g transform="translate(102 22)">
-          <path
-            className="mascot-sparkle"
-            d="M0 -4.5 L1.4 -1.4 L4.5 0 L1.4 1.4 L0 4.5 L-1.4 1.4 L-4.5 0 L-1.4 -1.4 Z"
-            fill="#0a84ff"
-            style={{ animationDelay: "0.9s" }}
-          />
+          <path className="mascot-sparkle" d={STAR(4.5)} fill="#0a84ff" style={{ animationDelay: "0.9s" }} />
         </g>
-        <g transform="translate(106 74)">
-          <path
-            className="mascot-sparkle"
-            d="M0 -5 L1.5 -1.5 L5 0 L1.5 1.5 L0 5 L-1.5 1.5 L-5 0 L-1.5 -1.5 Z"
-            fill="#00c389"
-            style={{ animationDelay: "1.7s" }}
-          />
+        <g transform="translate(108 74)">
+          <path className="mascot-sparkle" d={STAR(5)} fill="#00c389" style={{ animationDelay: "1.7s" }} />
         </g>
-        <g transform="translate(14 80)">
-          <path
-            className="mascot-sparkle"
-            d="M0 -3.8 L1.2 -1.2 L3.8 0 L1.2 1.2 L0 3.8 L-1.2 1.2 L-3.8 0 L-1.2 -1.2 Z"
-            fill="#6d4bf6"
-            style={{ animationDelay: "0.5s" }}
-          />
+        <g transform="translate(12 80)">
+          <path className="mascot-sparkle" d={STAR(3.8)} fill="#6d4bf6" style={{ animationDelay: "0.5s" }} />
         </g>
       </svg>
+
+      {/* Crossfading captions, one per act */}
+      <div className="relative h-7">
+        <span className="mascot-caption absolute inset-x-0 text-center text-sm md:text-base font-bold tracking-tight text-[#0a6cdc]">
+          Îngrijire dentară
+        </span>
+        <span
+          className="mascot-caption absolute inset-x-0 text-center text-sm md:text-base font-bold tracking-tight text-[#00875a]"
+          style={{ animationDelay: "4s" }}
+        >
+          Zâmbete sănătoase
+        </span>
+        <span
+          className="mascot-caption absolute inset-x-0 text-center text-sm md:text-base font-bold tracking-tight text-[#6d4bf6]"
+          style={{ animationDelay: "8s" }}
+        >
+          Dentistul tău prietenos
+        </span>
+      </div>
     </div>
   );
 }
