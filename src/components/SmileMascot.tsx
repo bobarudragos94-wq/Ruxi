@@ -152,16 +152,34 @@ export function SmileMascot() {
             />
           </g>
 
-          {/* Toothbrush: bristles point DOWN onto the crown, handle extends
-              right. Bristle tips sit at local y=17. */}
+          {/* Toothbrush (modern): white rounded head with 9 dense tufts
+              (blue indicator tufts in the middle), tapered neck, gradient
+              handle with teal grip. Bristles point DOWN; tips at local y=17. */}
           <g className="mascot-brush">
-            <rect x="16" y="0.8" width="46" height="6.4" rx="3.2" fill="url(#brushGrad)" />
-            <rect x="-4" y="0" width="25" height="8" rx="4" fill="#4ba3ff" />
-            <rect x="-1" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
-            <rect x="3" y="8" width="2.6" height="9" rx="1" fill="#eaf3ff" />
-            <rect x="7" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
-            <rect x="11" y="8" width="2.6" height="9" rx="1" fill="#eaf3ff" />
-            <rect x="15" y="8" width="2.6" height="9" rx="1" fill="#dbeafe" />
+            {/* Dense bristle tufts */}
+            <rect x="-4" y="8" width="2.2" height="8.6" rx="1.1" fill="#dbeafe" />
+            <rect x="-1.2" y="8" width="2.2" height="9" rx="1.1" fill="#eaf3ff" />
+            <rect x="1.6" y="8" width="2.2" height="8.6" rx="1.1" fill="#dbeafe" />
+            <rect x="4.4" y="8" width="2.2" height="9" rx="1.1" fill="#9cc8ff" />
+            <rect x="7.2" y="8" width="2.2" height="8.7" rx="1.1" fill="#7db8ff" />
+            <rect x="10" y="8" width="2.2" height="9" rx="1.1" fill="#9cc8ff" />
+            <rect x="12.8" y="8" width="2.2" height="8.6" rx="1.1" fill="#eaf3ff" />
+            <rect x="15.6" y="8" width="2.2" height="9" rx="1.1" fill="#dbeafe" />
+            <rect x="18.4" y="8" width="2.2" height="8.6" rx="1.1" fill="#eaf3ff" />
+            {/* White head capsule */}
+            <rect x="-6" y="0" width="28.5" height="8.4" rx="4.2" fill="#f2f8ff" stroke="#bcd6f5" strokeWidth="0.6" />
+            {/* Tapered neck */}
+            <path d="M22 2.2 C27 1.6 30 1.4 34 1.6 L34 7 C30 7.2 27 7 22 6.4 Z" fill="#cfe3ff" />
+            {/* Ergonomic handle */}
+            <rect x="33" y="0.6" width="35" height="7.6" rx="3.8" fill="url(#brushGrad)" />
+            {/* Teal soft-grip */}
+            <rect x="45" y="2" width="18" height="4.8" rx="2.4" fill="#0bbf92" />
+            <rect x="47.5" y="3" width="1.6" height="2.8" rx="0.8" fill="#089975" />
+            <rect x="51" y="3" width="1.6" height="2.8" rx="0.8" fill="#089975" />
+            <rect x="54.5" y="3" width="1.6" height="2.8" rx="0.8" fill="#089975" />
+            <rect x="58" y="3" width="1.6" height="2.8" rx="0.8" fill="#089975" />
+            {/* Gloss highlight */}
+            <rect x="35.5" y="1.6" width="26" height="1.5" rx="0.75" fill="#ffffff" opacity="0.4" />
           </g>
         </g>
 
