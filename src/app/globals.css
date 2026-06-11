@@ -149,6 +149,65 @@ body {
   animation: mascot-halo-pulse 4s ease-in-out infinite;
 }
 
+/* --- Brushing scene: one shared 7s loop ---
+   ~0-9%  brush slides in   ~9-42% scrubs (foam pops)
+   ~42-52% brush exits      ~55-70% shine sweeps   ~60-76% star bursts */
+
+@keyframes mascot-brush-scrub {
+  0% { transform: translate(150px, -14px) rotate(10deg); }
+  9%, 11% { transform: translate(62px, 4px) rotate(6deg); }
+  16% { transform: translate(34px, 7px) rotate(2deg); }
+  21% { transform: translate(62px, 3px) rotate(7deg); }
+  26% { transform: translate(34px, 7px) rotate(2deg); }
+  31% { transform: translate(62px, 3px) rotate(7deg); }
+  36% { transform: translate(34px, 7px) rotate(2deg); }
+  42% { transform: translate(56px, 4px) rotate(6deg); }
+  52%, 100% { transform: translate(150px, -16px) rotate(14deg); }
+}
+
+@keyframes mascot-foam-pop {
+  0%, 13% { opacity: 0; transform: translateY(2px) scale(0.4); }
+  20% { opacity: 0.95; transform: translateY(-1px) scale(1); }
+  36% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
+  46%, 100% { opacity: 0; transform: translateY(-9px) scale(1.15); }
+}
+
+@keyframes mascot-shine-sweep {
+  0%, 55% { transform: translateX(0) skewX(-14deg); opacity: 0; }
+  58% { opacity: 1; }
+  70% { transform: translateX(160px) skewX(-14deg); opacity: 1; }
+  71%, 100% { transform: translateX(160px) skewX(-14deg); opacity: 0; }
+}
+
+@keyframes mascot-burst-pop {
+  0%, 60% { opacity: 0; transform: scale(0) rotate(0deg); }
+  68% { opacity: 1; transform: scale(1.3) rotate(18deg); }
+  76%, 100% { opacity: 0; transform: scale(0.2) rotate(36deg); }
+}
+
+/* Static fallbacks keep scene elements hidden/offscreen when animations are off. */
+.mascot-brush {
+  transform: translate(150px, -16px) rotate(14deg);
+  animation: mascot-brush-scrub 7s ease-in-out infinite;
+}
+.mascot-foam {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mascot-foam-pop 7s ease-in-out infinite;
+}
+.mascot-shine-sweep {
+  opacity: 0;
+  transform: skewX(-14deg);
+  animation: mascot-shine-sweep 7s ease-in-out infinite;
+}
+.mascot-burst {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mascot-burst-pop 7s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
   .animate-fade-in,
@@ -161,7 +220,11 @@ body {
   .mascot-float,
   .mascot-eye,
   .mascot-sparkle,
-  .mascot-halo {
+  .mascot-halo,
+  .mascot-brush,
+  .mascot-foam,
+  .mascot-shine-sweep,
+  .mascot-burst {
     animation: none;
   }
   /* Keep the smile visible when its draw-in animation is disabled. */
