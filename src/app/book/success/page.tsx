@@ -28,7 +28,7 @@ export default function BookSuccessPage() {
         </div>
       </div>
 
-      <h1 className="animate-fade-up delay-150 text-2xl md:text-3xl font-bold tracking-tight mb-3">
+      <h1 className="animate-fade-up delay-150 font-display text-3xl md:text-4xl font-semibold tracking-tight mb-3">
         Programare confirmată!
       </h1>
 

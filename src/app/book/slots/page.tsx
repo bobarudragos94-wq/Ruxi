@@ -190,7 +190,7 @@ export default function BookSlotsPage() {
       <div className="space-y-4">
         <StepIndicator step={step} isNew={kind === "new"} />
         <div className="animate-fade-up">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">
+          <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight mb-1">
             {firstName ? `Bună, ${firstName}!` : "Programare"}
           </h1>
           <p className="text-on-surface-variant">

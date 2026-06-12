@@ -6,12 +6,25 @@ import { Icon } from "@/components/Icon";
 import { Field, Input } from "@/components/Field";
 import { Button } from "@/components/ui";
 import { SmileMascot } from "@/components/SmileMascot";
+import { Reveal } from "@/components/Reveal";
 import { BRAND_NAME } from "@/lib/brand";
 
-const HIGHLIGHTS = [
-  { icon: "event_available", title: "Programare în 1 minut", text: "Alegi serviciul, vezi intervalele libere și confirmi. Fără telefoane, fără așteptare." },
-  { icon: "family_restroom", title: "Medicul tău, mereu", text: "Dacă ești deja pacient, te programăm automat la medicul care îți cunoaște istoricul." },
-  { icon: "notifications_active", title: "Remindere de control", text: "Îți amintim când e timpul pentru următorul control, ca să nu ratezi nimic." },
+const STEPS = [
+  {
+    title: "Introdu numărul de telefon",
+    text: "Te recunoaștem dacă ești deja pacient și te programăm la medicul tău.",
+    icon: "call",
+  },
+  {
+    title: "Alege serviciul și ora",
+    text: "Vezi doar intervalele cu adevărat libere din calendarul cabinetului.",
+    icon: "calendar_month",
+  },
+  {
+    title: "Primești confirmarea",
+    text: "Pe loc, în mai puțin de un minut. Îți amintim înainte de vizită.",
+    icon: "check_circle",
+  },
 ];
 
 const SERVICES = [
@@ -86,106 +99,139 @@ export default function BookPage() {
   }
 
   return (
-    <div className="space-y-14 md:space-y-20">
+    <div className="space-y-16 md:space-y-24">
       {/* HERO */}
-      <section className="text-center pt-2 md:pt-6">
-        <div className="animate-scale-in mb-2">
-          <SmileMascot />
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-8 items-center pt-2 md:pt-8">
+        <div className="text-center lg:text-left order-2 lg:order-1">
+          <p className="animate-fade-up inline-flex items-center gap-2 text-xs font-bold tracking-[0.18em] uppercase text-on-surface-variant mb-5">
+            <span className="relative flex w-2 h-2">
+              <span className="absolute inline-flex w-full h-full rounded-full bg-[#00c389] animate-pulse-ring" />
+              <span className="relative inline-flex w-2 h-2 rounded-full bg-[#00c389]" />
+            </span>
+            Programare online · oricând
+          </p>
+
+          <h1 className="animate-fade-up delay-75 font-display text-[2.6rem] md:text-6xl font-semibold tracking-tight leading-[1.05] mb-6 text-on-surface">
+            Zâmbetul tău merită
+            <br />
+            <em className="text-gradient-primary font-medium">cea mai bună îngrijire</em>
+          </h1>
+
+          <p className="animate-fade-up delay-150 text-on-surface-variant text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-8">
+            La {BRAND_NAME} te bucuri de tratamente stomatologice moderne, într-o atmosferă
+            relaxată. Programează-te online în mai puțin de un minut.
+          </p>
+
+          <div className="animate-fade-up delay-225 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <a href="#programare">
+              <Button icon="calendar_add_on" className="!h-14 !px-7 shadow-lg shadow-primary/25">
+                Programează-te acum
+              </Button>
+            </a>
+            <a
+              href="#cum-functioneaza"
+              className="h-12 px-6 rounded-xl font-semibold flex items-center gap-2 text-primary hover:bg-primary-fixed/50 transition-colors"
+            >
+              Vezi cum funcționează
+              <Icon name="arrow_downward" className="!text-xl" />
+            </a>
+          </div>
+
+          {/* Trust band */}
+          <div className="animate-fade-up delay-300 mt-10 grid grid-cols-3 divide-x divide-outline-variant/60 border-y border-outline-variant/50">
+            {[
+              { big: "Sub 1 minut", small: "ca să te programezi" },
+              { big: "Non-stop", small: "online, oricând" },
+              { big: "Date protejate", small: "nimic nu e public" },
+            ].map((t) => (
+              <div key={t.big} className="py-4 px-2 text-center">
+                <p className="font-semibold text-sm md:text-base">{t.big}</p>
+                <p className="text-xs text-on-surface-variant mt-0.5">{t.small}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="animate-fade-up inline-flex items-center gap-2 bg-primary-fixed/70 text-on-primary-fixed-variant text-sm font-semibold px-4 py-1.5 rounded-full mb-5">
-          <span className="relative flex w-2 h-2">
-            <span className="absolute inline-flex w-full h-full rounded-full bg-[#00c389] animate-pulse-ring" />
-            <span className="relative inline-flex w-2 h-2 rounded-full bg-[#00c389]" />
-          </span>
-          Programare online, disponibilă oricând
+        {/* Signature stage: animated mascot scene */}
+        <div className="order-1 lg:order-2 animate-scale-in delay-150">
+          <div className="relative overflow-hidden rounded-[2rem] border border-outline-variant/50 glass shadow-xl shadow-primary/10 px-6 pt-10 pb-7 max-w-md mx-auto">
+            <div className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[#0a84ff]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-16 w-56 h-56 rounded-full bg-[#00c389]/10 blur-3xl" />
+            <svg
+              className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] aspect-square opacity-30 animate-spin-slow"
+              viewBox="0 0 200 200"
+              aria-hidden
+            >
+              <circle
+                cx="100"
+                cy="100"
+                r="86"
+                fill="none"
+                stroke="#0a84ff"
+                strokeWidth="1.2"
+                strokeDasharray="2 11"
+                strokeLinecap="round"
+              />
+            </svg>
+            <SmileMascot />
+          </div>
         </div>
+      </section>
 
-        <h1 className="animate-fade-up delay-75 text-4xl md:text-6xl font-bold tracking-tight leading-[1.08] mb-5">
-          Zâmbetul tău merită
-          <br />
-          <span className="text-gradient-primary">cea mai bună îngrijire</span>
-        </h1>
-
-        <p className="animate-fade-up delay-150 text-on-surface-variant text-base md:text-lg max-w-2xl mx-auto mb-8">
-          La {BRAND_NAME} te bucuri de tratamente stomatologice moderne, într-o atmosferă relaxată.
-          Programează-te online în mai puțin de un minut.
-        </p>
-
-        <div className="animate-fade-up delay-225 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a href="#programare">
-            <Button icon="calendar_add_on" className="!h-14 !px-7 shadow-lg shadow-primary/25">
-              Programează-te acum
-            </Button>
-          </a>
-          <a
-            href="#servicii"
-            className="h-12 px-6 rounded-xl font-semibold flex items-center gap-2 text-primary hover:bg-primary-fixed/50 transition-colors"
-          >
-            Vezi serviciile
-            <Icon name="arrow_downward" className="!text-xl" />
-          </a>
-        </div>
-
-        {/* Trust strip */}
-        <div className="animate-fade-up delay-300 mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-on-surface-variant">
-          <span className="flex items-center gap-2">
-            <Icon name="workspace_premium" className="!text-xl text-[#e06a00]" filled />
-            Echipament modern
-          </span>
-          <span className="flex items-center gap-2">
-            <Icon name="sentiment_satisfied" className="!text-xl text-[#00875a]" filled />
-            Pacienți mulțumiți
-          </span>
-          <span className="flex items-center gap-2">
-            <Icon name="schedule" className="!text-xl text-[#0a6cdc]" filled />
-            Punctualitate garantată
-          </span>
-        </div>
+      {/* HOW IT WORKS */}
+      <section id="cum-functioneaza" className="scroll-mt-24">
+        <Reveal className="text-center mb-10">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Cum funcționează</h2>
+          <p className="text-on-surface-variant mt-2">Trei pași, fără telefoane și fără așteptare.</p>
+        </Reveal>
+        <ol className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 max-w-4xl mx-auto">
+          {/* Connector line (desktop) */}
+          <div className="hidden md:block absolute top-7 left-[16%] right-[16%] h-px bg-gradient-to-r from-[#0a84ff]/40 via-outline-variant to-[#00c389]/40" aria-hidden />
+          {STEPS.map((s, i) => (
+            <li key={s.title} className="relative">
+              <Reveal delay={i * 120} className="text-center px-2">
+                <div className="relative inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0a84ff] to-[#005dac] text-white items-center justify-center shadow-lg shadow-primary/25 mb-4">
+                  <Icon name={s.icon} filled />
+                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-white text-primary text-xs font-bold flex items-center justify-center shadow border border-outline-variant/50">
+                    {i + 1}
+                  </span>
+                </div>
+                <h3 className="font-bold mb-1.5">{s.title}</h3>
+                <p className="text-sm text-on-surface-variant leading-relaxed max-w-[17rem] mx-auto">{s.text}</p>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* SERVICES */}
       <section id="servicii" className="scroll-mt-24">
-        <div className="text-center mb-7">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Servicii disponibile online</h2>
+        <Reveal className="text-center mb-8">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Servicii disponibile online</h2>
           <p className="text-on-surface-variant mt-2">Alege serviciul potrivit și rezervă-ți locul.</p>
-        </div>
+        </Reveal>
         <div className="flex flex-wrap justify-center gap-3">
           {SERVICES.map((s, i) => (
-            <a
-              key={s.label}
-              href="#programare"
-              className={`animate-fade-up delay-${[75, 150, 225, 300, 450][i] ?? 300} group flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-surface-container-lowest border border-outline-variant shadow-sm hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 transition-all`}
-            >
-              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#e3f0ff] to-[#d4e3ff] text-[#0a6cdc] flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Icon name={s.icon} filled className="!text-xl" />
-              </span>
-              <span className="font-semibold">{s.label}</span>
-            </a>
+            <Reveal key={s.label} delay={i * 80}>
+              <a
+                href="#programare"
+                className="group flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-surface-container-lowest border border-outline-variant/70 shadow-sm hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 transition-all"
+              >
+                <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#e3f0ff] to-[#d4e3ff] text-[#0a6cdc] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Icon name={s.icon} filled className="!text-xl" />
+                </span>
+                <span className="font-semibold">{s.label}</span>
+              </a>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* HIGHLIGHTS */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-        {HIGHLIGHTS.map((h, i) => (
-          <div
-            key={h.title}
-            className={`animate-fade-up delay-${[150, 300, 450][i]} bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 shadow-sm hover:shadow-md transition-shadow`}
-          >
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0a84ff] to-[#005dac] text-white flex items-center justify-center mb-4 shadow-md shadow-primary/20">
-              <Icon name={h.icon} filled />
-            </div>
-            <h3 className="font-bold text-lg mb-1.5">{h.title}</h3>
-            <p className="text-sm text-on-surface-variant leading-relaxed">{h.text}</p>
-          </div>
-        ))}
-      </section>
-
       {/* BOOKING FORM */}
       <section id="programare" className="scroll-mt-24">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+        <Reveal className="text-center mb-6">
+          <p className="text-xs font-bold tracking-[0.18em] uppercase text-primary mb-2">Începe acum</p>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">
             {isNew ? "Aproape gata" : "Începe programarea"}
           </h2>
           <p className="text-on-surface-variant mt-2 max-w-md mx-auto">
@@ -193,9 +239,9 @@ export default function BookPage() {
               ? "Nu te-am găsit în sistem. Completează datele ca să continui."
               : "Introdu numărul de telefon — te recunoaștem dacă ești deja pacient."}
           </p>
-        </div>
+        </Reveal>
 
-        <div className="max-w-md mx-auto">
+        <Reveal delay={120} className="max-w-md mx-auto">
           <div className="rounded-3xl p-[1.5px] bg-gradient-to-br from-[#0a84ff]/50 via-outline-variant to-[#00c389]/40 shadow-xl shadow-primary/10">
             <div className="glass rounded-[calc(1.5rem-1.5px)] p-6 md:p-8">
               {!isNew ? (
@@ -267,7 +313,7 @@ export default function BookPage() {
               Datele tale medicale nu sunt afișate. Folosim numărul doar pentru a-ți identifica medicul.
             </p>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

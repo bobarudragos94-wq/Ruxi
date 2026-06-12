@@ -4,6 +4,10 @@ import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand";
 export default function BookLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background relative overflow-x-clip">
+      <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&display=swap"
+        rel="stylesheet"
+      />
       {/* Decorative background: soft gradient + floating orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <div className="absolute -top-32 -right-24 w-[28rem] h-[28rem] rounded-full bg-gradient-to-br from-[#0a84ff]/15 to-[#00c389]/10 blur-3xl animate-float-slow" />
@@ -18,7 +22,7 @@ export default function BookLayout({ children }: { children: React.ReactNode }) 
               <Icon name="dentistry" filled />
             </div>
             <div>
-              <p className="font-bold text-primary leading-tight tracking-tight">{BRAND_NAME}</p>
+              <p className="font-display font-semibold text-lg text-primary leading-tight tracking-tight">{BRAND_NAME}</p>
               <p className="text-xs text-on-surface-variant">{BRAND_TAGLINE}</p>
             </div>
           </div>
