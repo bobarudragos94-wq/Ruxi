@@ -157,22 +157,6 @@ export default function BookPage() {
           <div className="relative overflow-hidden rounded-[2rem] border border-outline-variant/50 glass shadow-xl shadow-primary/10 px-6 pt-10 pb-7 max-w-md mx-auto">
             <div className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[#0a84ff]/10 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-20 -left-16 w-56 h-56 rounded-full bg-[#00c389]/10 blur-3xl" />
-            <svg
-              className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] aspect-square opacity-30 animate-spin-slow"
-              viewBox="0 0 200 200"
-              aria-hidden
-            >
-              <circle
-                cx="100"
-                cy="100"
-                r="86"
-                fill="none"
-                stroke="#0a84ff"
-                strokeWidth="1.2"
-                strokeDasharray="2 11"
-                strokeLinecap="round"
-              />
-            </svg>
             <SmileMascot />
           </div>
         </div>
